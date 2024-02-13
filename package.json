@@ -1,0 +1,43 @@
+{
+	"name": "PotionVision",
+	"version": "0.0.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"serve": "vite --host",
+		"build:ts": "vue-tsc --noEmit --allowUnreachableCode && vite build",
+		"build": "vite build",
+		"build:app": "vite build && npx cap copy && open ios/App/App.xcworkspace",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@fullhuman/postcss-purgecss": "^4.1.3",
+		"@nplayer/danmaku": "^1.0.12",
+		"@types/node": "^18.14.0",
+		"@types/path-browserify": "^1.0.0",
+		"@types/qs": "^6.9.7",
+		"less": "^4.1.2",
+		"nplayer": "^1.0.15",
+		"path-browserify": "^1.0.1",
+		"upath": "^2.0.1",
+		"vue": "^3.2.25",
+		"vue-router": "^4.0.0-0",
+		"vuex": "^4.0.2",
+		"wavesurfer.js": "^7.2.2"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^4.2.3",
+		"@vue/compiler-sfc": "^3.0.5",
+		"autoprefixer": "^10.4.2",
+		"dotenv": "^16.0.3",
+		"less-loader": "^7.3.0",
+		"postcss": "^8.4.5",
+		"tailwindcss": "^3.0.12",
+		"typescript": "^4.4.4",
+		"vite": "^4.3.8",
+		"vite-plugin-monaco-editor": "^1.1.0",
+		"vue-tsc": "^1.2.0"
+	}
+}

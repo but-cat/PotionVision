@@ -1,0 +1,24 @@
+{
+	"name": "launch",
+	"version": "1.0.0",
+	"path": "launch.tools/",
+	"type": "application",
+	"description": "Launch",
+	"dependencies": {
+		"ejs": "^2.5.7"
+	},
+
+	"apps": {
+		"path": "launch.tools/",
+		"main": "index.html",
+		"icon": "favicon.ico",
+		"extension": []
+	},
+
+	"tools": {
+		"path": "launch.tools/",
+		"main": "index.html",
+		"icon": "favicon.ico",
+		"extension": []
+	}
+}
