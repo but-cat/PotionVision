@@ -1,0 +1,34 @@
+{
+	"extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
+	"compilerOptions": {
+		"target": "ESNext",
+		"composite": true,
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"jsx": "preserve",
+		"resolveJsonModule": true,
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"types": ["electron-vite/node"],
+
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"core/*"
+			],
+			"@preload/*": [
+				"preload/*"
+			],
+			"@root/*": [
+				"/*"
+			],
+		}
+	},
+	"include": [
+		"electron.vite.config.*", 
+		"core", 
+		"preload",
+		"package.json",
+		"public",
+	],
+}

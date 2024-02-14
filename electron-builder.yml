@@ -1,0 +1,57 @@
+appId: com.butcat.PotionVision
+productName: PotionVision
+copyright: 'Copyright© butcat 2024'
+directories:
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - node_modules/**
+  # - public/preloaded/*
+  - public/**
+win:
+  icon: './public/favicon.ico'
+  executableName: PotionVision
+nsis:
+  oneClick: false
+  perMachine: false
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  installerIcon: './public/favicon.ico'
+  uninstallerIcon: './public/favicon.ico'
+  installerHeaderIcon: './public/favicon.ico'
+mac:
+  icon: ./public/logo.icns
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+    - CFBundleDocumentTypes: 
+      - CFBundleTypeExtensions: ["*", "md"]
+  notarize: false
+
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: electronjs.org
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+publish:
+  provider: generic
+  url: https://example.com/auto-updates

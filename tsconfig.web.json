@@ -1,0 +1,41 @@
+{
+	"extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"importHelpers": true,
+		"jsx": "preserve",
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"strict": true,
+		"allowSyntheticDefaultImports": true,
+		"skipLibCheck": true,
+		"noUnusedLocals": false,
+
+		"composite": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"src/*"
+			],
+			"@core/*": [
+				"core/*"
+			],
+			"@root/*": [
+				"./*"
+			],
+		}
+	},
+
+	"include": [
+		"src",
+		"src/env.d.ts", 
+		"src/**/*", 
+		"src/**/*.vue", 
+		
+		"core/**/*",
+		"preload/*.d.ts"
+	],
+}

@@ -9,7 +9,7 @@ import '@/style/tailwind.css';
 import App from './index.vue';
 
 import GlobleViewComponents from "@/view/index";
-
+import GlobleComponents from "@/components/index";
 
 function $xhr(url: string, options: any = {}) {
 	return new Promise((resolve, reject) => {
@@ -33,7 +33,7 @@ app.use(router);
 // app.use(store);
 // app.use(OrbitUI);
 app.use(GlobleViewComponents);
-// app.use(GlobleComponents);
+app.use(GlobleComponents);
 
 app.config.globalProperties.$xhr = $xhr;
 (window as any).$xhr = $xhr;

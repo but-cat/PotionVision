@@ -23,7 +23,7 @@ export default {
 	meta: {
 		title: '下载',
 		icons,
-		dev: false,
+		dev: true,
 		current: !true,
 	},
 	component,

@@ -8,9 +8,9 @@
 		<div class="flex-1 flex flex-col overflow-hidden">
 			<router-view v-slot="{ Component }">
 				<Transition name="fade-transform" mode="out-in">
-					<KeepAlive>
+					<!-- <KeepAlive> -->
 						<component :is="Component" />
-					</KeepAlive>
+					<!-- </KeepAlive> -->
 				</Transition>
 			</router-view>
 			

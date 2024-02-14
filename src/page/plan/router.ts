@@ -16,7 +16,7 @@ export default {
 	meta: {
 		title: '任务',
 		icons,
-		dev: false,
+		dev: true,
 		current: !true,
 	},
 	component,

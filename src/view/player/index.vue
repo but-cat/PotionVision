@@ -88,31 +88,38 @@ registerIcon('enterFullscreen', createIcon(full));
 
 async function danmakuParse() {
 
-	
 
-	const res = await fetch(danmaku.value);
-	const parser = new DOMParser();
-	const danmakuXml = parser.parseFromString(await res.text(),"text/xml");
+	try {
+		const danmakuUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.xml');
+		console.log('danmakuUrl', danmakuUrl);
+		
+		const res = await fetch(danmakuUrl);
+		if (!res.ok) return;
+		const parser = new DOMParser();
+		const danmakuXml = parser.parseFromString(await res.text(),"text/xml");
 
-	// const el = danmakuXml.querySelector('d');
-	// console.log(el, el!.getAttribute('p')?.split(','));
-	const danmakuList: BulletOption[] = [];
+		// const el = danmakuXml.querySelector('d');
+		// console.log(el, el!.getAttribute('p')?.split(','));
+		const danmakuList: BulletOption[] = [];
 
-	danmakuXml.querySelectorAll('d').forEach(el => {
-		const p = el.getAttribute('p')?.split(',') as string[];
-		danmakuList.push({
-			text: el.innerHTML,
-			time: Number(p[0]),
-			color: `#${Number(p[6]).toString(16).padStart(6, '0')}`,
-			type: ['', 'scroll', '', '', '', 'top', 'bottom'][Number(p[1])] as 'top' | 'bottom' | 'scroll',
+		danmakuXml.querySelectorAll('d').forEach(el => {
+			const p = el.getAttribute('p')?.split(',') as string[];
+			danmakuList.push({
+				text: el.innerHTML,
+				time: Number(p[0]),
+				color: `#${Number(p[6]).toString(16).padStart(6, '0')}`,
+				type: ['', 'scroll', '', '', '', 'top', 'bottom'][Number(p[1])] as 'top' | 'bottom' | 'scroll',
+			});
+			
+			
 		});
-		
-		
-	});
 
-	danmakuList.sort((a, b) => a.time - b.time);
+		danmakuList.sort((a, b) => a.time - b.time);
 
-	player.danmaku.resetItems(danmakuList);
+		player.danmaku.resetItems(danmakuList);
+	} catch (error) {
+		console.error(error);
+	}
 
 	// return danmakuList;
 }
@@ -121,9 +128,11 @@ async function danmakuParse() {
 
 watch(danmaku, danmakuParse);
 watch(url, () => {
+	if(!url.value) return;
 	// (player.el as HTMLVideoElement).src = url.value;
 	player.updateOptions({ src: url.value });
-});
+	danmakuParse();
+}, { immediate: true });
 
 onMounted(async () => {
 

@@ -17,7 +17,7 @@ export default {
 	meta: {
 		title: '文件',
 		icons,
-		dev: false,
+		dev: true,
 		current: !true,
 	},
 	component,

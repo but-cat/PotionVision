@@ -1,14 +1,15 @@
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-	important: true,
+	important: false,
 	darkMode: "class",													// 基于类的主动暗模式
+	important: 'body',
 	// i18n: {
 	// 	locales: ["en-US"],
 	// 	defaultLocale: "en-US",
 	// },
 	purge: {
-		content: ["./src/**/*.vue", "./src/**/*.vue"],					// 这些选项直接传递给PurgeCSS
+		content: ["./src/**/*.vue", "./src/**/*.vue", "./tools/**/*.vue", "./tools/**/*.vue"],					// 这些选项直接传递给PurgeCSS
 	},
 	theme: {
 		// extend: {
@@ -17,6 +18,32 @@ module.exports = {
 		// 		landscape: "url('/images/landscape/2.jpg')",
 		// 	}),
 		// },
+		extend: {
+			// backgroundImage: (theme) => ({
+			// 	check: "url('/icons/check.svg')",
+			// 	landscape: "url('/images/landscape/2.jpg')",
+			// }),
+			spacing: {
+				'96': '24rem',
+				'100': '28rem',
+				'150': '32rem',
+				'200': '42rem',
+				'250': '48rem',
+				'300': '56rem',
+				'350': '64rem',
+				'400': '72rem',
+				'450': '80rem',
+				'500': '88rem',
+				'550': '96rem',
+				'600': '104rem',
+				'650': '112rem',
+				'700': '120rem',
+				'750': '128rem',
+				'800': '136rem',
+				'850': '144rem',
+				'900': '152rem',
+			}
+		},
 
 		colors: {
 			'theme': {
@@ -46,6 +73,22 @@ module.exports = {
 				light: '#81e6d9',
 				DEFAULT: '#38b2ac',
 				dark: '#2c7a7b',
+			},
+
+			'dark': {
+				"0": "#f7f5f5",
+				"100": "#e6e6e6",
+				"200": "#cccccc",
+				"300": "#b3b3b3",
+				"400": "#999999",
+				"500": "#808080",
+				"600": "#666666",
+				"700": "#4d4d4d",
+				"800": "#191919",// 333333
+				"900": "#111111",
+				light: '#bcccdc',
+				DEFAULT: '#829ab1',
+				dark: '#627d98',
 			},
 
 

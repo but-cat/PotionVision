@@ -1,8 +1,12 @@
 {
-	"printWidth": 2000,
+	"printWidth": 20000,
 	"eslintIntegration": false,
+	"vueIndentScriptAndStyle": false,
 	"singleAttributePerLine": false,
 	"singleQuote": true,
 	"semi": true,
-	"useTabs": true
+	"useTabs": true,
+	"bracketSpacing": true,
+	"arrowParens": "avoid"
 }
+

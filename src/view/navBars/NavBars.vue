@@ -1,10 +1,10 @@
 <template>
-	<aside class="w-72 h-full bg-gray-100 dark:bg-gray-800 flex-0 flex-shrink-0 border-r-4 border-primary-200 dark:border-primary-800 flex-col hidden sm:flex">
-		<a href="#" class="w-full h-16 px-5 mt-3 inline-flex items-center justify-start">
+	<aside class="navigation w-72 h-full bg-gray-100 dark:bg-gray-800 flex-0 flex-shrink-0 border-r-4 border-primary-200 dark:border-primary-800 flex-col hidden sm:flex">
+		<a href="#" class="w-full h-16 px-5 mt-10 inline-flex items-center justify-start">
 			<img src="/logo.png" class="w-10 h-10" />
 			<h1 class="text-md ml-2">{{ appName }}</h1>
 		</a>
-		<div class="w-full px-3 py-4 flex-grow flex flex-col justify-between items-center text-gray-500">
+		<div class="w-full flex-1 px-3 py-4 flex-grow flex flex-col justify-between items-center text-gray-500">
 			<div class="w-full">
 				<nav class="w-full flex flex-col items-center my-6 space-y-4">
 					<!-- <a href="#/" :class="$route.path == '/' ? ['text-primary-600', 'bg-white rounded-lg'] : []" class="w-full px-3 py-2 flex items-center rounded-md bg-white dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
@@ -101,4 +101,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+
+.navigation {
+	-webkit-app-region: drag;
+
+	& > * {
+		-webkit-app-region: no-drag;
+	}
+}
+</style>

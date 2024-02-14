@@ -11,12 +11,13 @@ import Setting from "./setting/router";
 
 export default [
 	
-	Home,
-	Video,
-	Plan,
-	File,
-	Download,
-	Subscribe,
+	Home,															// 主页
+	Video,															// 视频
+	File,															// 文件
 
-	Setting,
+	// Plan,															// 计划
+	// Download,														// 下载
+	// Subscribe,														// 订阅
+
+	Setting,														// 设置
 ];

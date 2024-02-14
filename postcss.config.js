@@ -3,10 +3,10 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
 		'./src/**/*.html',
 		'./src/**/*.vue',
 		'./src/**/*.jsx',
-	],
-	safelist: [
-		/^swiper/,
-		/^swiper-/,
+
+		'./view/**/*.html',
+		'./view/**/*.vue',
+		'./view/**/*.jsx',
 	],
 
 	// Include any special characters you're using in this regular expression
