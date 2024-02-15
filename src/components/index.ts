@@ -18,7 +18,14 @@ import oModalPopup from "@/components/modal/popup.vue";
 import oContextMenu from "@/components/modal/contextmenu.vue";
 
 
+
+// 控件类
+import oPagination from "@/components/pagination/index.vue";
 import oSteps from "@/components/steps/index.vue";
+
+import oSashX from "./sash/sashX.vue";
+import oSashY from "./sash/sashY.vue";
+
 
 // 动画特效类
 import eCollapse from "@/components/effects/e_collapse.vue";
@@ -66,7 +73,10 @@ const components = {
 
 
 
+	oPagination,
 	oSteps,
+	oSashX,
+	oSashY,
 
 	oFolder,
 	oBreadcrumbs,

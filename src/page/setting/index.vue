@@ -1,18 +1,5 @@
 <template>
-	<!--
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
+
 	<form>
 		<div class="space-y-12">
 			<div class="border-b border-gray-900/10 pb-12">

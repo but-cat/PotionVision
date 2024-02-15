@@ -5,7 +5,7 @@
 
 		<NewsBar />
 
-		<div class="flex-1 flex flex-col overflow-hidden">
+		<div class="flex-1 h-full flex flex-col overflow-hidden">
 			<router-view v-slot="{ Component }">
 				<Transition name="fade-transform" mode="out-in">
 					<!-- <KeepAlive> -->
@@ -96,5 +96,25 @@ body,
 	color: #eee9dc;
 	font: 16px Verdana, sans-serif;
 	// user-select: none;
+}
+
+
+.nplayer.nplayer-web-full {
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 6vh;
+		-webkit-app-region: drag;
+		// background-color: aqua;
+		z-index: 3000;
+	}
+
+	// & > * {
+	// 	-webkit-app-region: no-drag;
+	// }
 }
 </style>

@@ -13,6 +13,7 @@ export default {
 		title: '视频',
 		icons,
 		dev: false,
+		nav: false,
 	},
 	component,
 };

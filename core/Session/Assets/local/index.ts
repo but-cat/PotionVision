@@ -1,4 +1,5 @@
 import { Handler, useRouter, useGet, usePost } from '../../../Session/utils/router/index';
+import packageConfig from "@root/package.json";
 // import parse from 'body/json';
 // import typeis from 'type-is';
 
@@ -107,8 +108,15 @@ export default class AssetsLocal extends Handler {
 			// console.log('Assets', 'constructor', folderPath, assetsPath);
 
 			const files = (await fs.readdir(folderPath)) as string[];
+
+			const filterRole = (name) => [
+				!true,
+				name.at(0) !== '.',
+				!['.DS_Store', `.${packageConfig.name}`].includes(name),
+			].find(Boolean);
+
 			const fileList = files
-				.filter(item => true || item.at(0) !== '.')
+				.filter(filterRole)
 				.map(async (item, index) => {
 					const filePath = join(folderPath, item);
 					const fileStat = await fs.stat(filePath);
