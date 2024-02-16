@@ -56,8 +56,6 @@ export default class TerminalSource extends EventEmitter {
 			useConpty: !TerminalSource.isMac,
 		};
 
-		const aria2c = `/Users/butcat/Desktop/aria2_test/extra/darwin/arm64/engine/aria2.conf/aria2c`;
-
 		//绑定当前系统 node 环境
 		const term = TerminalSource.isMac ? pty.spawn('zsh', ['-l'], termOptions) : pty.spawn('cmd.exe', [''], termOptions);
 

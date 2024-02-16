@@ -12,40 +12,49 @@
 					<!-- <p class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.bittorrent?.info?.name }}</p> -->
 
 					<!-- <p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ person.email }}</p> -->
-					<!-- <progress :value="item.completedLength" :max="item.totalLength" class="w-full h-3"></progress> -->
-				
+					
 					<div class="w-96 mt-2 flex flex-col">
 						<oProgress :modelValue="item.completedLength" :max="item.totalLength" class="w-full h-1" />
-						<div class="flex justify-between">
-							<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ filesize(item.completedLength ?? 0) }} / {{ filesize(item.totalLength ?? 0) }}</p>
-							<p v-if="item.bittorrent" class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ item.numSeeders }} | {{ item.connections }}</p>
-							<p v-else></p>
-						</div>
+						<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ filesize(item.completedLength ?? 0) }} / {{ filesize(item.totalLength ?? 0) }}</p>
 					</div>
 				</div>
 			</div>
 			<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-				<p class="text-sm leading-6 text-gray-900 dark:text-gray-50">↓{{ filesize(item.downloadSpeed ?? 0) }} / ↑{{ filesize(item.uploadSpeed ?? 0) }}</p>
+				<p class="text-sm leading-6 text-gray-900 dark:text-gray-50">{{ filesize(item.downloadSpeed ?? 0) }}/{{ filesize(item.uploadSpeed ?? 0) }}</p>
 				<!-- <p v-if="item.lastSeen" class="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
 					Last seen <time :datetime="item.lastSeenDateTime">{{ item.lastSeen }}</time>
 				</p> -->
-				<div v-if="item.status == 'active'" class="mt-1 flex items-center gap-x-1.5">
-					<!-- <div class="flex-none rounded-full bg-emerald-500/20 p-1">
-						<div class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-					</div> -->
+				<div v-if="['paused'].includes(item.status)" class="mt-1 flex items-center gap-x-1.5">
 					<div class="flex-none rounded-full bg-blue-500/20 p-1">
 						<div class="h-1.5 w-1.5 rounded-full bg-blue-500" />
 					</div>
-					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">传输中</p>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">暂停</p>
+				</div>
+
+				<div v-if="['error'].includes(item.status)" @click="() => { activeItem = item; openErrorModal = true }" class="mt-1 flex items-center gap-x-1.5">
+					<div class="flex-none rounded-full bg-red-500/20 p-1">
+						<div class="h-1.5 w-1.5 rounded-full bg-red-500" />
+					</div>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">错误</p>
+				</div>
+
+				<div v-if="['complete'].includes(item.status)" class="mt-1 flex items-center gap-x-1.5">
+					<div class="flex-none rounded-full bg-emerald-500/20 p-1">
+						<div class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+					</div>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">完成</p>
 				</div>
 			</div>
 		</li>
 	</ul>
+
+	<ErrorModal v-model="openErrorModal" :item="activeItem"/>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref, toRefs, computed, onMounted, watch, getCurrentInstance, onBeforeUnmount } from 'vue';
 import { filesize } from "filesize";
+import ErrorModal from "./error.vue";
 
 
 interface TellActiveItem {
@@ -72,10 +81,6 @@ interface TellActiveItem {
 	downloadSpeed: number;										// 下载速度
 	uploadSpeed: number;										// 上传速度
 
-	connections: number;										// 连接数
-	numSeeders: number;											// 种子数
-	seeder: boolean;											// 是否是种子
-
 
 	files: {
 		index: number;											// 文件索引
@@ -87,15 +92,25 @@ interface TellActiveItem {
 	}[];
 }
 
-const tellActive = ref<TellActiveItem[]>([
-
-]);
-
+const tellActive = ref<TellActiveItem[]>([]);
+const openErrorModal = ref<boolean>(false);
+const activeItem = ref<TellActiveItem | null>(null);
 
 
 async function getTellActive() {
 	try {
-		const res = await fetch('apps://download.api/progress/tellActive');
+		const res = await fetch('apps://download.api/progress/call', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify([
+				'tellStopped',
+				0,
+				100,
+			]),
+		});
 		const data = await res.json();
 		// console.log("data", data);
 

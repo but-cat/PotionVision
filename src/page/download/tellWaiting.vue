@@ -77,36 +77,6 @@ interface TellActiveItem {
 }
 
 const tellActive = ref<TellActiveItem[]>([
-	{
-		bittorrent: {
-			announceList: [],
-			creationDate: 0,
-			verifiedLength: 0,
-			verifyIntegrityPending: false,
-			info: {
-				name: '',
-			},
-		},
-		infoHash: '',
-		status: 'waiting',
-		dir: '',
-		numPieces: 0,
-		completedLength: 0,
-		totalLength: 0,
-		downloadSpeed: 0,
-		uploadSpeed: 0,
-
-		files: [
-			{
-				index: 0,
-				path: '',
-				length: 0,
-				completedLength: 0,
-				selected: false,
-				uris: [],
-			},
-		],
-	},
 ]);
 
 

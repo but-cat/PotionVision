@@ -18,8 +18,8 @@ import { reactive, ref, toRefs, markRaw, computed, onMounted, watch, getCurrentI
 import HeadBar from './head.vue';
 
 // import TellActiveList from './tellActiveList.vue';
-import TellActive from './tellActive.vue';
-import TellStopped from './tellStopped.vue';
+import TellActive from './active/index.vue';
+import TellStopped from './stopped/index.vue';
 import TellWaiting from './tellWaiting.vue';
 
 

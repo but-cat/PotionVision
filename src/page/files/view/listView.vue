@@ -27,7 +27,7 @@
 							<!-- <div class="icon-block w-6 h-6 mr-5 flex flex-col items-center justify-center relative">
 								<FolderIcon :name="item.name" :toolsPage="true" class="w-6 h-6 flex-0" ref="folderIcon"/>
 							</div> -->
-							<FolderIcon :name="item.name" :toolsPage="true" class="w-6 h-6 flex-0 mr-5" ref="folderIcon"/>
+							<FolderIcon :name="item.name" class="w-6 h-6 flex-0 mr-5" ref="folderIcon"/>
 							<span @click="copyText(item.name)" class="text-xs text-center">{{ item.name }}</span>
 						</div>
 
@@ -35,7 +35,7 @@
 							<!-- <div class="icon-block w-6 h-6 mr-5 flex flex-col items-center justify-center relative">
 								<FileIcon :name="item.name" :toolsPage="true" class="w-6 h-6 flex-0" ref="fileIcon" />
 							</div> -->
-							<FileIcon :name="item.name" :toolsPage="true" class="w-6 h-6 flex-0 mr-5" ref="fileIcon" />
+							<FileIcon :name="item.name" class="w-6 h-6 flex-0 mr-5" ref="fileIcon" />
 							<span @click="copyText(item.name)" class="text-xs text-center">{{ item.name }}</span>
 						</div>
 						

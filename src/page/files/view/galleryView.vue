@@ -13,13 +13,13 @@
 			<div @keydown.right.capture @keydown.left.capture ref="fileListContainer" class="w-full h-full p-6 space-x-2 flex font-medium text-gray-900 dark:text-gray-200 overflow-y-hidden overflow-x-auto ">
 				<div @keydown.right.capture @keydown.left.capture v-for="item in fileList" @contextmenu.prevent.stop="setActiveFile($event, item)" :class="previewItem == item && 'bg-primary-200/40 dark:bg-primary-400/10'" class="item rounded p-4 w-full h-full">
 					<div v-if="item.isFolder" @click="activePath = item.path" class="flex flex-col items-center justify-self-center">
-						<oFolder class="icon-block" :name="item.name" :isSubNode="item.isSubNode" :toolsPage="true" />
+						<oFolder class="icon-block" :name="item.name" :isSubNode="item.isSubNode" />
 						<span @click.prevent.stop="copyText(item.name)" class="item-name mt-2 text-xs text-center">{{ item.name }}</span>
 					</div>
 
 					<div v-else @click="setPreviewItem(item)" class="flex flex-col items-center justify-between">
 						<div class="icon-block flex-1 flex flex-col items-center justify-center relative">
-							<FileIcon :name="item.name" :toolsPage="true" class="w-12 h-12 flex-0" ref="fileIcon" />
+							<FileIcon :name="item.name" class="w-12 h-12 flex-0" ref="fileIcon" />
 						</div>
 						<span @click.prevent.stop="copyText(item.name)" class="item-name mt-2 text-xs text-center">{{ item.name }}</span>
 					</div>

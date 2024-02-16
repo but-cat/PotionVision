@@ -43,6 +43,7 @@ export default class ftp extends Applet {
             const vttPath = '05.vtt';
 
             const res = await new Promise((resolve, reject) => {
+				// ffmpeg -i chase.mkv -map 0:s:0 subs.srt
                 exec(`ffmpeg -i ${videoPath} -map 0:s:0 ${vttPath}`, (error, stdout, stderr) => {
                     if (error) {
                         console.log(`error: ${error.message}`);

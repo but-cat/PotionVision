@@ -8,41 +8,36 @@
 					
 
 					<p v-if="item?.bittorrent?.info" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.bittorrent?.info?.name }}</p>
-					<p v-else class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.files[0].path.replace(/(.*\/)*([^.]+).*/ig, "$2") }}</p>
+					<p v-else-if="item?.files[0].path" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.files[0].path.replace(/(.*\/)*([^.]+).*/ig, "$2") }}</p>
+					<p v-else class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.files[0].uris[0].uri }}</p>
 					<!-- <p class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-50">{{ item?.bittorrent?.info?.name }}</p> -->
 
 					<!-- <p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ person.email }}</p> -->
-					
+					<!-- <progress :value="item.completedLength" :max="item.totalLength" class="w-full h-3"></progress> -->
+				
 					<div class="w-96 mt-2 flex flex-col">
 						<oProgress :modelValue="item.completedLength" :max="item.totalLength" class="w-full h-1" />
-						<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ filesize(item.completedLength ?? 0) }} / {{ filesize(item.totalLength ?? 0) }}</p>
+						<div class="flex justify-between">
+							<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ filesize(item.completedLength ?? 0) }} / {{ filesize(item.totalLength ?? 0) }}</p>
+							<p v-if="item.bittorrent" class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400">{{ item.numSeeders }} | {{ item.connections }}</p>
+							<p v-else></p>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-				<p class="text-sm leading-6 text-gray-900 dark:text-gray-50">{{ filesize(item.downloadSpeed ?? 0) }}/{{ filesize(item.uploadSpeed ?? 0) }}</p>
+				<p class="text-sm leading-6 text-gray-900 dark:text-gray-50">↓{{ filesize(item.downloadSpeed ?? 0) }} / ↑{{ filesize(item.uploadSpeed ?? 0) }}</p>
 				<!-- <p v-if="item.lastSeen" class="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
 					Last seen <time :datetime="item.lastSeenDateTime">{{ item.lastSeen }}</time>
 				</p> -->
-				<div v-if="['paused'].includes(item.status)" class="mt-1 flex items-center gap-x-1.5">
+				<div v-if="item.status == 'active'" class="mt-1 flex items-center gap-x-1.5">
+					<!-- <div class="flex-none rounded-full bg-emerald-500/20 p-1">
+						<div class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+					</div> -->
 					<div class="flex-none rounded-full bg-blue-500/20 p-1">
 						<div class="h-1.5 w-1.5 rounded-full bg-blue-500" />
 					</div>
-					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">暂停</p>
-				</div>
-
-				<div v-if="['error'].includes(item.status)" class="mt-1 flex items-center gap-x-1.5">
-					<div class="flex-none rounded-full bg-red-500/20 p-1">
-						<div class="h-1.5 w-1.5 rounded-full bg-red-500" />
-					</div>
-					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">错误</p>
-				</div>
-
-				<div v-if="['complete'].includes(item.status)" class="mt-1 flex items-center gap-x-1.5">
-					<div class="flex-none rounded-full bg-emerald-500/20 p-1">
-						<div class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-					</div>
-					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">完成</p>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">传输中</p>
 				</div>
 			</div>
 		</li>
@@ -78,6 +73,10 @@ interface TellActiveItem {
 	downloadSpeed: number;										// 下载速度
 	uploadSpeed: number;										// 上传速度
 
+	connections: number;										// 连接数
+	numSeeders: number;											// 种子数
+	seeder: boolean;											// 是否是种子
+
 
 	files: {
 		index: number;											// 文件索引
@@ -85,59 +84,22 @@ interface TellActiveItem {
 		length: number;											// 文件大小
 		completedLength: number;								// 已完成大小 此文件的完整长度（以字节为单位）。
 		selected: boolean;										// 是否选择此文件
-		uris: string[];											// 文件的URI字符串
+		uris: {
+			uri: string;										// URI
+			status: string;										// 状态
+		}[];
 	}[];
 }
 
 const tellActive = ref<TellActiveItem[]>([
-	{
-		bittorrent: {
-			announceList: [],
-			creationDate: 0,
-			verifiedLength: 0,
-			verifyIntegrityPending: false,
-			info: {
-				name: '',
-			},
-		},
-		infoHash: '',
-		status: 'waiting',
-		dir: '',
-		numPieces: 0,
-		completedLength: 0,
-		totalLength: 0,
-		downloadSpeed: 0,
-		uploadSpeed: 0,
 
-		files: [
-			{
-				index: 0,
-				path: '',
-				length: 0,
-				completedLength: 0,
-				selected: false,
-				uris: [],
-			},
-		],
-	},
 ]);
 
 
 
 async function getTellActive() {
 	try {
-		const res = await fetch('apps://download.api/progress/call', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify([
-				'tellStopped',
-				0,
-				100,
-			]),
-		});
+		const res = await fetch('apps://download.api/progress/tellActive');
 		const data = await res.json();
 		// console.log("data", data);
 

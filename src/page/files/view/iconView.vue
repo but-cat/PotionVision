@@ -3,13 +3,13 @@
 
 		<div v-for="item in fileList" @contextmenu.prevent.stop="setActiveFile($event, item)" class="item w-full h-full">
 			<div v-if="item.isFolder" @click="activePath = item.path" class="flex flex-col items-center justify-self-center">
-				<oFolder class="icon-block" :name="item.name" :isSubNode="item.isSubNode" :toolsPage="true" />
+				<oFolder class="icon-block" :name="item.name" :isSubNode="item.isSubNode" />
 				<span @click.prevent.stop="copyText(item.name)" class="item-name mt-2 text-xs text-center">{{ item.name }}</span>
 			</div>
 
 			<div v-else @click="openVideo(item)" class="flex flex-col items-center justify-between">
 				<div class="icon-block flex-1 flex flex-col items-center justify-center relative">
-					<FileIcon :name="item.name" :toolsPage="true" class="w-12 h-12 flex-0" ref="fileIcon" />
+					<FileIcon :name="item.name" class="w-12 h-12 flex-0" ref="fileIcon" />
 				</div>
 				<span @click.prevent.stop="copyText(item.name)" class="item-name mt-2 text-xs text-center">{{ item.name }}</span>
 			</div>

@@ -46,7 +46,7 @@ const open = computed({
 		return props.modelValue;
 	},
 	set(value) {
-		if (value) url.value = '';
+		url.value = '';
 		emit('update:modelValue', value);
 	},
 });

@@ -1,4 +1,5 @@
 import { app } from 'electron';
+import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import Aria2Client from './aria2/index';
 import { exec } from 'child_process';
 import upath from 'upath';
@@ -9,14 +10,15 @@ import upath from 'upath';
 // import aria2cPath from '../public/extra/darwin/arm64/engine/aria2c?asset';
 
 // const aria2c = `/Users/butcat/Desktop/aria2_test/extra/darwin/arm64/engine/aria2c`;
-const aria2c = upath.join(__dirname, '../renderer/extra/darwin/arm64/engine/aria2c')
 
-const magnet = 'magnet:?xt=urn:btih:eb7fe92b884497ad9422d40b323a15e51e7f7d6b&tr=http%3a%2f%2ft.nyaatracker.com%2fannounce&tr=http%3a%2f%2ftracker.kamigami.org%3a2710%2fannounce&tr=http%3a%2f%2fshare.camoe.cn%3a8080%2fannounce&tr=http%3a%2f%2fopentracker.acgnx.se%2fannounce&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2ft.acg.rip%3a6699%2fannounce&tr=https%3a%2f%2ftr.bangumi.moe%3a9696%2fannounce&tr=udp%3a%2f%2ftr.bangumi.moe%3a6969%2fannounce&tr=http%3a%2f%2fopen.acgtracker.com%3a1096%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce';
-// const link = 'https://www.bilibili.com/video/BV1Zy4y1r7ZB';
-// const link = 'https://dl240.filemate13.shop/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ0p0ZkZ4MUJnaUJhUmI3WnNteE8ydkxZSkdJcXNhM29PdEgrRUZwV2FJWWZhakFrR0Vwc3hnUkhxTjh1a3R1Q3ZIcnN0eWY5QitRd0x0bWVQbXhCZDdtVk93TFA3T1VPcHdhVnh2clVKVThoYWsxTnpyNkVXZzQyMkxqMy9OWVRSZTlEd09NcWo0MnRsTnpYbkNmZkx3MnAwQThIZklzc0laaXFuTTQxaXcwTHNrdllFaENoY2pJOEVLaTl6bXlhM0lweEk9';
-const link = 'https://www.youtube.com/watch?v=cIGv9kqIeBQ';
+
 // extends aria2s
 export default class Asia2 extends Aria2Client {
+
+	public static get isMac() {
+		return process.platform === 'darwin';
+	}
+
 
 	public readonly aria2;
 
@@ -26,6 +28,11 @@ export default class Asia2 extends Aria2Client {
 
 	constructor(port = 6851) {
 		// if(Asia2.instance) return Asia2.instance;
+
+		const aria2c_Mac = is.dev ? upath.join(__dirname, '../renderer/extra/darwin/arm64/engine/aria2c') : upath.join(__dirname, '../../../app.asar.unpacked/public/extra/darwin/arm64/engine/aria2c');
+		const aria2c_Win = is.dev ? upath.join(__dirname, '../renderer/extra/win32/x64/engine/aria2c.exe') : upath.join(__dirname, '../../../app.asar.unpacked/public/extra/win32/x64/engine/aria2c.exe');
+
+		const aria2c = Asia2.isMac ? aria2c_Mac : aria2c_Win;
 
 		const options = `--enable-rpc --rpc-listen-all=true --rpc-allow-origin-all --rpc-listen-port=${port}`;
 		exec(`${aria2c} ${options}`, (error, stdout, stderr) => {
