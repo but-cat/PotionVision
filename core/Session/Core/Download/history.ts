@@ -39,7 +39,7 @@ export default class history extends Applet {
     public async allList() {
         console.log('getPage');
 
-		const { context } = this;
+		const { context, session } = this;
         
         // return this.tools.getPage(uuid);
 

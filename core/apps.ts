@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path, { join, resolve } from "node:path";
 import upath from "upath";
 import EventTarget from "events";
+import { getPort } from "./utils/getPort";
 
 
 import logo from '@root/public/logo.png?asset';
@@ -12,12 +13,19 @@ import logo_ico from '@root/public/favicon.ico?asset';
 import BrowserWindow from "./Browser/index";																						// 浏览器窗口
 import Session, {  } from "./Session/index";
 
+import Asia2 from "./aria2";
+
 
 process.env.DIST_ELECTRON = path.join(__dirname, '..') as string;
 process.env.DIST = path.join(process.env.DIST_ELECTRON, '../') as string;
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST_ELECTRON, '../public') as string;
 
 export default class Apps extends EventTarget {
+
+	public _asia2?: Asia2;
+	get asia2() {
+		return this._asia2!;
+	}
 
 	static readonly instance = new Apps;																						// 单例
 
@@ -98,6 +106,13 @@ export default class Apps extends EventTarget {
 		super();
 
 
+
+		(async () => {
+			const port = await getPort();
+			this._asia2 = new Asia2(port);
+		})();
+
+		
 	}
 
 
@@ -198,9 +213,12 @@ export default class Apps extends EventTarget {
 		// return;
 		
 		const window = new BrowserWindow(this, {
+			// width: 1680,
+			// height: 920,
+
 			width: 1680,
+			height: 750,
 			minWidth: 950,
-			height: 920,
 			minHeight: 750,
 			frame: false,
 			fullscreen: false,

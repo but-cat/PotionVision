@@ -110,9 +110,19 @@ async function danmakuParse() {
 				color: `#${Number(p[6]).toString(16).padStart(6, '0')}`,
 				type: ['', 'scroll', '', '', '', 'top', 'bottom'][Number(p[1])] as 'top' | 'bottom' | 'scroll',
 			});
-			
-			
 		});
+
+		// const danmakuXmlD = danmakuXml.querySelectorAll('d');
+		// for (let i = 0; i < danmakuXmlD.length; i++) {
+		// 	const el = danmakuXml[i];
+		// 	const p = el.getAttribute('p')?.split(',') as string[];
+		// 	danmakuList.push({
+		// 		text: el.innerHTML,
+		// 		time: Number(p[0]),
+		// 		color: `#${Number(p[6]).toString(16).padStart(6, '0')}`,
+		// 		type: ['', 'scroll', '', '', '', 'top', 'bottom'][Number(p[1])] as 'top' | 'bottom' | 'scroll',
+		// 	});
+		// }
 
 		danmakuList.sort((a, b) => a.time - b.time);
 
@@ -140,6 +150,17 @@ onMounted(async () => {
 	await danmakuParse();
 	
 	player.mount(nplayer.value);
+
+
+	const traceUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.vtt');
+	const traceEl = document.createElement('track');
+	traceEl.setAttribute("label", "简体中文");
+	traceEl.setAttribute("kind", "subtitles");
+	traceEl.setAttribute("srclang", "ch");
+	traceEl.setAttribute("src", traceUrl);
+
+	player.video.appendChild(traceEl);
+	player.video.textTracks[0].mode = "showing"
 });
 
 

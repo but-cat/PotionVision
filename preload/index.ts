@@ -2,6 +2,8 @@ import packageConfig from '@root/package.json';
 import { contextBridge } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
+import "./message";
+
 // Custom APIs for renderer
 const api = {
 	getUserAgent() {

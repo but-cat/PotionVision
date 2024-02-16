@@ -6,6 +6,7 @@ import Session from '@/Session/index';
 import upath from 'upath';
 import { join } from 'path';
 import History from './history';
+import Progress from "./progress";
 
 // @useRouter
 export default class Download extends Prototype {
@@ -15,7 +16,7 @@ export default class Download extends Prototype {
 	}
 
 	constructor(public readonly session: Session) {
-		super(session, [History]);
+		super(session, [Progress,History]);
 
 		// session.session.on('will-download', this.willDownload.bind(this));
 	}

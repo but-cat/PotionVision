@@ -125,7 +125,7 @@ const $news = globalProperties!.$news;
 const webview = ref(null as any);
 
 const focusInput = ref(false as boolean);
-const contentUrl = ref('' as string | undefined);
+const contentUrl = ref('https://mikanani.me/' as string | undefined);
 
 
 watch(() => url?.value, (val) => {

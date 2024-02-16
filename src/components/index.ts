@@ -26,6 +26,7 @@ import oSteps from "@/components/steps/index.vue";
 import oSashX from "./sash/sashX.vue";
 import oSashY from "./sash/sashY.vue";
 
+import oProgress from "@/components/progress/index.vue";
 
 // 动画特效类
 import eCollapse from "@/components/effects/e_collapse.vue";
@@ -48,6 +49,8 @@ import HighlightJs from "@/components/code/index.vue";
 import FileIcon from "@/components/icoBar/file_ico.vue";
 import FolderIcon from "@/components/icoBar/folder_ico.vue";
 import oFolder from "@/components/icoBar/folder.vue";
+
+
 
 const components = {
 	oInput,
@@ -77,6 +80,7 @@ const components = {
 	oSteps,
 	oSashX,
 	oSashY,
+	oProgress,
 
 	oFolder,
 	oBreadcrumbs,

@@ -17,7 +17,7 @@ import createUUID from "../utils/uuid";
 // import EdgeBar from "./EdgeBar";
 
 import Session from "../Session/index";
-
+import Terminal from "./terminal";
 
 // import logo from '@root/public/logo.png?asset';
 import logo_ico from '@root/public/favicon.ico?asset';
@@ -62,7 +62,7 @@ export default class Project extends BrowserWindow {
 	
 	public session: Session;
 
-	
+	public terminal?: Terminal;
 
 	public readonly EffectiveAppearance = "dark";																					// 暗色模式
 	public readonly MultiplePage: boolean = false;																					// 是否分屏
@@ -161,8 +161,7 @@ export default class Project extends BrowserWindow {
 				 */
 				contextIsolation: false,
 				// preload: path.join(__static, 'preload/preload.js')
-
-
+				preload: join(__dirname, '../preload/index.js'), 
 
 
 				/* 沙盒 */
@@ -176,7 +175,7 @@ export default class Project extends BrowserWindow {
 
 		const { webContents } = this;
 
-
+		webContents.userAgent = `${app.name}/${app.getVersion()} tools/${this.uuid} view/${this.uuid}`;
 
 
 		const setTitleBarOverlay = () => {
@@ -205,9 +204,19 @@ export default class Project extends BrowserWindow {
 		} else {
 			webContents.loadFile(join(__dirname, '../renderer/src/index.html'));
 		}
+		// setTimeout(() => {
+		// 	webContents.openDevTools();
+		// }, 1000);
 
 		if(!Project.isMac) this.setIcon(logo_ico);
 
+
+
+		const createTerminal = this.createTerminal.bind(this);
+		ipcMain.on(`view-terminal-create:${this.uuid}`, createTerminal);
+		this.webContents.once('destroyed', () => {
+			ipcMain.off(`view-terminal-create:${this.uuid}`, createTerminal);
+		});
 
 
 		this.session = config.session;
@@ -280,6 +289,21 @@ export default class Project extends BrowserWindow {
 			file: options.file,
 			icon,
 		});
+	}
+
+
+
+	private createTerminal() {
+		try {
+			if(this.terminal) {
+				this.terminal.close();
+				this.terminal = undefined;
+			}
+			// if(this.terminal) return;
+			this.terminal = new Terminal(this);
+		} catch (error) {
+			console.error("createTerminal: ", error);
+		}
 	}
 	
 }

@@ -88,6 +88,7 @@ function openVideo(item: FileItem) {
 		"video/webm",
 		"video/quicktime",
 		"video/x-msvideo",
+		"video/x-matroska",
 	];
 
 

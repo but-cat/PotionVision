@@ -4,7 +4,7 @@ import { Authority } from "./authority";
 import _Request from "./request";
 import _Response from "./response";
 
-import Session from '@/Session/index';
+import Session from '../../index';
 import ToolsPage from "@/Page/ToolsPage/index";
 function getOrbit() {
 	return Youfo.instance;

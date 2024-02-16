@@ -6,7 +6,7 @@
 		</a>
 		<div class="w-full flex-1 px-3 py-4 flex-grow flex flex-col justify-between items-center text-gray-500">
 			<div class="w-full">
-				<nav class="w-full flex flex-col items-center my-6 space-y-4">
+				<nav class="w-full flex flex-col items-center my-6 space-y-2">
 					<!-- <a href="#/" :class="$route.path == '/' ? ['text-primary-600', 'bg-white rounded-lg'] : []" class="w-full px-3 py-2 flex items-center rounded-md bg-white dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
 						<svg viewBox="0 0 24 24" class="mr-2 h-6 w-6 flex-none dark:stroke-white stroke-gray-600" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -15,9 +15,11 @@
 						<span class="-sr-only">Home</span>
 					</a> -->
 
-					<router-link v-for="nav in navList" :to="`${nav.path}`" v-slot="{ isActive, href, navigate }" :data-laber="isActive" :class="isActive ? ['text-primary-600', 'bg-white dark:bg-slate-700 rounded-lg'] : []" class="w-full px-3 py-2 flex items-center rounded-md hover:bg-white hover:dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
-						<div v-html="nav.meta.icons" class="mr-2 h-6 w-6 flex-none dark:stroke-white stroke-gray-600"></div>
-						<span class="-sr-only">{{ nav.meta.title }}</span>
+					<router-link v-for="nav in navList" :to="`${nav.path}`" v-slot="{ isActive, href, navigate }" class="w-full h-10">
+						<div :data-laber="isActive" :class="isActive && ['text-primary-600', 'bg-white dark:bg-slate-700 rounded-lg']" class="w-full h-full px-3 py-2 flex items-center rounded-md hover:bg-white hover:dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
+							<div v-html="nav.meta.icons" class="mr-2 h-6 w-6 flex-none "></div>
+							<span class="-sr-only">{{ nav.meta.title }}</span>
+						</div>
 					</router-link>
 				</nav>
 

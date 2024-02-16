@@ -10,6 +10,8 @@ import fs from 'node:fs/promises';
 
 import Apps from './apps';
 
+
+
 if (!app.requestSingleInstanceLock()) {
 	// 限制只可以打开一个应用
 	console.log('发现相同实例,已退出.');
