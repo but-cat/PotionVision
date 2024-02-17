@@ -5,7 +5,7 @@
 			<h1 class="text-md ml-2">{{ appName }}</h1>
 		</a>
 		<div class="w-full flex-1 px-3 py-4 flex-grow flex flex-col justify-between items-center text-gray-500">
-			<div class="w-full">
+			<div class="w-full flex-1 overflow-auto">
 				<nav class="w-full flex flex-col items-center my-6 space-y-2">
 					<!-- <a href="#/" :class="$route.path == '/' ? ['text-primary-600', 'bg-white rounded-lg'] : []" class="w-full px-3 py-2 flex items-center rounded-md bg-white dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
 						<svg viewBox="0 0 24 24" class="mr-2 h-6 w-6 flex-none dark:stroke-white stroke-gray-600" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -23,10 +23,24 @@
 					</router-link>
 				</nav>
 
-				<label for="region" class="block text-sm leading-6 text-gray-900 dark:text-gray-50">历史记录</label>
+
+				<template v-if="$route.path !== '/video'">
+					<label for="region" class="block text-sm leading-6 text-gray-900 dark:text-gray-50">历史记录</label>
+
+					<nav class="w-full flex flex-col items-center my-2 space-y-2">
+						<router-link v-for="item in history" :to="{path:'/video',query: item }" v-slot="{ isActive, href, navigate }" class="w-full h-10">
+							<div :data-laber="isActive" :class="$route.query.url == item.url && ['text-primary-600', 'bg-white dark:bg-slate-700 rounded-lg']" class="w-full h-full px-3 py-2 flex items-center rounded-md hover:bg-white hover:dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
+								<span class="-sr-only truncate">{{ item.title }}</span>
+							</div>
+						</router-link>
+					</nav>
+				</template>
+
+				
+				
 			</div>
 
-			<div class="w-full inline-flex flex-col items-start justify-end h-60 pb-6">
+			<div class="w-full h-16 inline-flex flex-col items-start justify-end">
 				
 
 				<!-- <button class="p-1 rounded-full hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700">
@@ -89,16 +103,48 @@ export default defineComponent({
 	},
 	data: () => ({
 		appName: 'PotionVision',
+		history: [] as {
+			title: string;
+			time: number;
+			url: string;
+		}[],
 	}),
 	methods: {
 		dark() {
 			document.body.classList.toggle('dark');
+		},
+		video() {
+			this.$router.push({
+				path: 'video',
+				query: {
+					history: "true"
+				},
+			});
+		},
+
+		historyUpdata() {
+			const historyStr = localStorage.getItem('nplayer_history');
+			if (historyStr) {
+				const history = JSON.parse(historyStr) as {
+					title: string;
+					time: number;
+					url: string;
+				}[];
+
+				this.history = history;
+			}
 		},
 	},
 	computed: {
 		navList(): any {
 			return this.$router.options.routes.filter((nav: any) => nav.meta.nav || nav.meta.nav == undefined);
 		},
+	},
+	mounted() {
+		window.addEventListener('storage', () => {
+			this.historyUpdata();
+		});
+		this.historyUpdata();
 	},
 });
 </script>

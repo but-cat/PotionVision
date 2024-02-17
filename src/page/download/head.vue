@@ -26,7 +26,8 @@
 								</div>
 							</button>
 
-							<div v-if="menuOpen" @click.stop class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg " role="menu">
+							<div v-if="menuOpen" @click="menuOpen = false" class="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity"></div>
+							<div v-if="menuOpen" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg border border-1 border-gray-200 dark:border-gray-700" role="menu">
 								<!-- Active: "bg-gray-100", Not Active: "" -->
 								<a @click="openAddUrl = true" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">添加新任务</a>
 								<a @click="call(['pauseAll'])" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">暂停所有任务</a>

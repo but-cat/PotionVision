@@ -21,9 +21,10 @@ const globalProperties = internalInstance?.appContext.config.globalProperties;
 
 const props = defineProps<{
 	url: string;
+	time: number;
 	danmaku: string;
 }>();
-const { url, danmaku } = toRefs(props);
+const { url, time, danmaku } = toRefs(props);
 
 const nplayer = ref<HTMLDivElement>();
 
@@ -51,6 +52,7 @@ const player = new NPlayer({
 	progressDot: createIcon(dot, true)(),
 	posterPlayEl: createIcon(playBig)(),
 	plugins: [danmakus],
+	autoSeekTime: time.value,
 
 	settings: [
 		areaDanmaku,
@@ -128,7 +130,7 @@ async function danmakuParse() {
 
 		player.danmaku.resetItems(danmakuList);
 	} catch (error) {
-		console.error(error);
+		// console.log(error);
 	}
 
 	// return danmakuList;
@@ -141,6 +143,8 @@ watch(url, () => {
 	if(!url.value) return;
 	// (player.el as HTMLVideoElement).src = url.value;
 	player.updateOptions({ src: url.value });
+	player.currentTime = time.value;
+
 	danmakuParse();
 }, { immediate: true });
 
@@ -148,9 +152,12 @@ onMounted(async () => {
 
 	// const danmakuList: BulletOption[] =
 	await danmakuParse();
+
+	
+	console.log(props);
 	
 	player.mount(nplayer.value);
-
+	
 
 	const traceUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.vtt');
 	const traceEl = document.createElement('track');
@@ -165,6 +172,22 @@ onMounted(async () => {
 
 
 onBeforeUnmount(() => {
+	const history = JSON.parse(localStorage.getItem('nplayer_history') || '[]');
+	const title = url.value.replace(/(.*\/)*([^.]+).*/ig, "$2");
+	
+	const findIndex = history.findIndex((item: any) => item.url === url.value);
+	if(findIndex !== -1) history.splice(findIndex, 1);
+	
+	history.unshift({
+		title: title || '未知视频',
+		time: player.currentTime,
+		url: url.value,
+	});
+
+
+	history.length = Math.min(history.length, 3);
+	localStorage.setItem('nplayer_history', JSON.stringify(history));
+	window.dispatchEvent(new Event('storage'));
 	player?.dispose();
 });
 </script>

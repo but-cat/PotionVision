@@ -21,15 +21,32 @@
 				</div>
 			</div>
 			<div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-				<p class="text-sm leading-6 text-gray-900 dark:text-gray-50">{{ filesize(item.downloadSpeed ?? 0) }}/{{ filesize(item.uploadSpeed ?? 0) }}</p>
-				<!-- <p v-if="item.lastSeen" class="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
-					Last seen <time :datetime="item.lastSeenDateTime">{{ item.lastSeen }}</time>
-				</p> -->
+				<!-- <p class="text-sm leading-6 text-gray-900 dark:text-gray-50">{{ filesize(item.downloadSpeed ?? 0) }}/{{ filesize(item.uploadSpeed ?? 0) }}</p> -->
+				<p v-if="['waiting', 'paused'].includes(item.status)" class="mt-1 text-xs flex flex-row leading-5 text-gray-500 dark:text-gray-400">
+					<!-- Last seen <time :datetime="item.status">{{ item.gid }}</time> -->
+					
+					<button @click="unpause(item)" class="">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path d="M17.2204 8.68703C18.2558 9.25661 18.2558 10.7434 17.2204 11.313L7.2234 16.812C6.22371 17.362 5 16.6393 5 15.4991L5 4.50093C5 3.36068 6.22371 2.63805 7.2234 3.18795L17.2204 8.68703ZM16.7381 10.4377C17.0833 10.2478 17.0833 9.7522 16.7381 9.56234L6.74113 4.06327C6.4079 3.87997 6 4.12084 6 4.50093L6 15.4991C6 15.8792 6.4079 16.12 6.74114 15.9367L16.7381 10.4377Z"/>
+						</svg>
+					</button>
+
+					<!-- <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+						<path d="M5 2C3.89543 2 3 2.89543 3 4V16C3 17.1046 3.89543 18 5 18H7C8.10457 18 9 17.1046 9 16V4C9 2.89543 8.10457 2 7 2H5ZM4 4C4 3.44772 4.44772 3 5 3H7C7.55228 3 8 3.44772 8 4V16C8 16.5523 7.55228 17 7 17H5C4.44772 17 4 16.5523 4 16V4ZM13 2C11.8954 2 11 2.89543 11 4V16C11 17.1046 11.8954 18 13 18H15C16.1046 18 17 17.1046 17 16V4C17 2.89543 16.1046 2 15 2H13ZM12 4C12 3.44772 12.4477 3 13 3H15C15.5523 3 16 3.44772 16 4V16C16 16.5523 15.5523 17 15 17H13C12.4477 17 12 16.5523 12 16V4Z"/>
+					</svg> -->
+				</p>
 				<div v-if="item.status == 'waiting'" class="mt-1 flex items-center gap-x-1.5">
-					<div class="flex-none rounded-full bg-red-500/20 p-1">
-						<div class="h-1.5 w-1.5 rounded-full bg-red-500" />
+					<div class="flex-none rounded-full bg-orange-500/20 p-1">
+						<div class="h-1.5 w-1.5 rounded-full bg-orange-500" />
 					</div>
-					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">下载中</p>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">等待中</p>
+				</div>
+
+				<div v-if="item.status == 'paused'" class="mt-1 flex items-center gap-x-1.5">
+					<div class="flex-none rounded-full bg-orange-500/20 p-1">
+						<div class="h-1.5 w-1.5 rounded-full bg-orange-500" />
+					</div>
+					<p class="text-xs leading-5 text-gray-500 dark:text-gray-400">暂停中</p>
 				</div>
 			</div>
 		</li>
@@ -65,6 +82,8 @@ interface TellActiveItem {
 	downloadSpeed: number;										// 下载速度
 	uploadSpeed: number;										// 上传速度
 
+	gid: string;												// 任务的GID
+
 
 	files: {
 		index: number;											// 文件索引
@@ -79,6 +98,28 @@ interface TellActiveItem {
 const tellActive = ref<TellActiveItem[]>([
 ]);
 
+
+async function unpause(item: TellActiveItem) {
+	try {
+		const res = await fetch('apps://download.api/progress/call', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify([
+				'unpause',
+				item.gid,
+			]),
+		});
+		const data = await res.json();
+		// console.log("data", data);
+
+		tellActive.value = data;
+	} catch (error) {
+		console.log(error);
+	}
+}
 
 
 async function getTellActive() {

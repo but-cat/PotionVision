@@ -68,7 +68,7 @@ import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
 
 import { FileItem } from '@/page/files/utils/filetype';
 
-const emit = defineEmits(['update:modelValue', 'url']);
+const emit = defineEmits(['update:modelValue', 'url', 'time']);
 
 const router = useRouter();
 const route = useRoute();
@@ -160,6 +160,7 @@ onMounted(async () => {
 	url.value = route.query.url as string;
 
 	emit('url', options.url);
+	emit('time', Number(route.query.time));
 
 	await getEpisodeInfo();
 
