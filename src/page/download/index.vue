@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full flex flex-col dark:text-white bg-gray-100 dark:bg-gray-900 overflow-hidden">
+	<div class="w-full h-full flex flex-col dark:text-white bg-gray-50/80 dark:bg-gray-900/60 overflow-hidden">
 		
 		<HeadBar v-model="tellType"/>
 		

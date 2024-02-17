@@ -1,8 +1,8 @@
 <template>
-	<div class="w-full h-full flex-0 bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
+	<div class="w-full h-full flex-0 bg-gray-100/40 dark:bg-gray-900/40 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
 		<!-- <Filelist /> -->
 
-		<div class="flex-1 h-full relative bg-gray-100 dark:bg-gray-900 text-gray-300 dark:text-gray-800 overflow-hidden">
+		<div class="flex-1 h-full relative  text-gray-300 dark:text-gray-800 overflow-hidden">
 			<GalleryView v-if="viewType == 'gallery'" v-model:path="activePath" :fileList="fileList" />
 			<ListView v-else-if="viewType == 'list'" v-model:path="activePath" :fileList="fileList" />
 			<IconView v-else-if="viewType == 'icon'" v-model:path="activePath" :fileList="fileList" />

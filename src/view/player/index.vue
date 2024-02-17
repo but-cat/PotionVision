@@ -173,7 +173,12 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
 	const history = JSON.parse(localStorage.getItem('nplayer_history') || '[]');
-	const title = url.value.replace(/(.*\/)*([^.]+).*/ig, "$2");
+	const fileName = url.value.replace(/(.*\/)*([^.]+).*/ig, "$2");
+	
+	let assetsPath = url.value.replace(/(\w+):\/\/([^/:]+)(:\d*)?/, '').replace(/\/[^\/]+$/, "");
+	const dirName = assetsPath.replace(/(.*\/)*([^.]+).*/ig, "$2");
+
+	const title = fileName.length < 10 && dirName ? `${dirName}/${fileName}` : fileName;
 	
 	const findIndex = history.findIndex((item: any) => item.url === url.value);
 	if(findIndex !== -1) history.splice(findIndex, 1);

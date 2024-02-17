@@ -1,6 +1,6 @@
 <template>
-	<div class="container my-12 mx-auto px-4 md:px-12">
-		<p class=" text-lg leading-8 text-gray-600 dark:text-gray-400">根目录</p>
+	<div v-if="fileList.length" class="container my-12 mx-auto px-4 md:px-12">
+		<p class=" text-lg leading-8 text-gray-600 dark:text-gray-400">观看历史</p>
 		<div class="flex flex-wrap -mx-1 lg:-mx-4">
 			<div v-for="(item, index) in fileList" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
 				<article class="h-60 flex flex-col overflow-hidden rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700">
@@ -66,6 +66,11 @@ const router = useRouter();
 const route = useRoute();
 
 const fileList = ref<FileItem[]>([]);
+const history = ref<{
+	title: string;
+	time: number;
+	url: string;
+}[]>([]);
 
 const videoList = ref<HTMLElement | null>(null);
 
@@ -87,23 +92,24 @@ const mimeList = [
 async function getEpisodeInfo() {
 	// const dirUrl = options.url.replace(/\/[^\/]+$/, '/');
 
-	const res = await fetch('assets://project.local/', {
-		method: 'DIRECTORY',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	});
+	const historyStr = localStorage.getItem('nplayer_history');
+	if (historyStr) history.value.push(...JSON.parse(historyStr));
 
-	const dirInfo = await res.json();
 
-	console.log('dirInfo', dirInfo);
+	for (let i = 0; i < history.value.length; i++) {
+		const current = history.value[i];
+		const res = await fetch(current.url, {
+			method: 'INFO',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const fileInfo = await res.json();
+		// 	if (/\.\_/.test(fileInfo.name)) continue;
+		// 	if (fileInfo.type !== 'file') continue;
+		// 	if (!mimeList.includes(fileInfo.mime)) continue;
 
-	for (let i = 0; i < dirInfo.children.length; i++) {
-		const current = dirInfo.children[i];
-		if (/\.\_/.test(current.name)) continue;
-		if (current.type !== 'file') continue;
-		if (!mimeList.includes(current.mime)) continue;
-		fileList.value.push(new FileItem(current));
+		fileList.value.push(new FileItem(fileInfo));
 	}
 }
 
@@ -116,7 +122,7 @@ function getAccessTime(accessTime: number) {
 
 
 function openVideo(item: FileItem) {
-	console.log('item', item.url);
+	
 	const mimeList = [
 		"video/mp4", 
 		"video/ogg",
@@ -126,11 +132,14 @@ function openVideo(item: FileItem) {
 		"video/x-matroska",
 	];
 
+	const historyItem = history.value.find((i) => item.url === i.url);
+	console.log('item', historyItem);
 
 	if(mimeList.includes(item.mime)) router.push({
 		path: 'video',
 		query: {
 			url: item.url,
+			time: historyItem?.time,
 		},
 	});
 }
