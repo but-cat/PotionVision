@@ -203,7 +203,7 @@ export default class Project extends BrowserWindow {
 			webContents.openDevTools();
 		} else {
 			webContents.loadFile(join(__dirname, '../renderer/src/index.html'));
-			webContents.openDevTools();
+			// webContents.openDevTools();
 		}
 
 		if(!Project.isMac) this.setIcon(logo_ico);

@@ -73,32 +73,32 @@ export default class Apps extends EventTarget {
 	private contextMenu: any = [
 
 		{
-			label: '新建独立浏览器窗口',
+			label: '新建窗口',
 			// icon: icon.settings,
 			enabled: true,													// 是否点击
 			click: async () => {
-				const projectDirectory = await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory', 'promptToCreate', 'dontAddToRecent'] });
-				if (projectDirectory.canceled) return;
-				const path = projectDirectory.filePaths[0];
+				// const projectDirectory = await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory', 'promptToCreate', 'dontAddToRecent'] });
+				// if (projectDirectory.canceled) return;
+				// const path = projectDirectory.filePaths[0];
 
-				console.log("新建项目窗口", path);
+				// console.log("新建项目窗口", path);
 				
-				this.createBrowserWindow(path);
+				this.createBrowserWindow();
 			}
 		},
 
 
-		{
-			label: '打开工具目录',
-			// icon: icon.settings,
-			enabled: true,													// 是否点击
-			click: async () => {
-				const toolsPath = path.normalize(path.join(app.getPath('appData'), app.name, 'tools'));
-				// const toolsPath = path.normalize(path.join(app.getPath('appData'), app.name));
-				// console.log("toolsPath", toolsPath, app.getGlobal("name"));
-				shell.showItemInFolder(toolsPath);
-			}
-		},
+		// {
+		// 	label: '打开工具目录',
+		// 	// icon: icon.settings,
+		// 	enabled: true,													// 是否点击
+		// 	click: async () => {
+		// 		const toolsPath = path.normalize(path.join(app.getPath('appData'), app.name, 'tools'));
+		// 		// const toolsPath = path.normalize(path.join(app.getPath('appData'), app.name));
+		// 		// console.log("toolsPath", toolsPath, app.getGlobal("name"));
+		// 		shell.showItemInFolder(toolsPath);
+		// 	}
+		// },
 	];
 
 	constructor() {
@@ -117,6 +117,7 @@ export default class Apps extends EventTarget {
 
 
 	createMainWindow() {
+		this.createBrowserWindow();
 		return;
 	}
 

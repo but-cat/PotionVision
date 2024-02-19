@@ -29,8 +29,10 @@ yarn
 # run
 yarn dev
 
-# build
-yarn build
+# build mac
+yarn build:mac
+# build win
+yarn build:win
 ```
 
 

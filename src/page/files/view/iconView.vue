@@ -124,6 +124,8 @@ function openVideo(item: FileItem) {
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 3;
 	overflow: hidden;
+	color: #fff;
+	text-shadow: 0 0 2px #000;
 	// text-overflow: ellipsis;
 }
 </style>
