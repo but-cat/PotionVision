@@ -217,7 +217,7 @@ export default class Apps extends EventTarget {
 			// width: 1680,
 			// height: 920,
 
-			width: 1680,
+			width: 1280,
 			height: 750,
 			minWidth: 950,
 			minHeight: 750,
