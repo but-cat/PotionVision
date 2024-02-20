@@ -1,5 +1,7 @@
 import { ipcMain } from 'electron';
 import { join } from 'upath';
+import path from "path";
+import { is } from '@electron-toolkit/utils';
 import { EventEmitter } from 'node:events';
 const { exec } = require('child_process');
 // const express = require("express");
@@ -44,14 +46,29 @@ export default class TerminalSource extends EventEmitter {
 
 
 
-		// console.log('TerminalSource', process.env.HOME, process.env);
+		const mac = is.dev ? path.join(__dirname, '../renderer/extra/darwin/arm64/engine') : path.join(__dirname, '../../../app.asar.unpacked/public/extra/darwin/arm64/engine');
+		const win = is.dev ? path.join(__dirname, '../renderer/extra/win32/x64/engine') : path.join(__dirname, '../../../app.asar.unpacked/public/extra/win32/x64/engine');
+		
+
+		const Path = (process.env.Path as string).split(';');
+
+		const env = {
+			...process.env,
+			Path: [
+				TerminalSource.isMac ? mac : win,
+				...Path
+			].join(';'),
+		};
+
+		console.log('TerminalSource', env);
 
 		const termOptions: IWindowsPtyForkOptions = {
 			name: 'xterm-color',
 			cols: 300,
 			rows: 48,
 			cwd: join(workerPath),
-			env: process.env,
+			// env: process.env,
+			env,
 
 			useConpty: !TerminalSource.isMac,
 		};
