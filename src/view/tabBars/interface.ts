@@ -3,7 +3,7 @@ import NPlayer from 'nplayer';
 import Danmaku, { DanmakuPluginOption } from '@nplayer/danmaku';
 import { BulletOption } from '@nplayer/danmaku/src/ts/danmaku/bullet';
 
-export default class VideoItem {
+export default class TabItem extends EventTarget {
 
 
 	static generateUUID() {
@@ -20,7 +20,7 @@ export default class VideoItem {
 
 
 
-	readonly uuid: string = VideoItem.generateUUID();
+	readonly uuid: string = TabItem.generateUUID();
 
 
 	
@@ -59,38 +59,47 @@ export default class VideoItem {
 		loop: boolean;
 		poster: string;
 		src: string;
+	} = {
+		title: "",
+		favicon: "",
+		playing: false,
+		loading: false,
+		ended: false,
+		controls: true,
+		volume: 1,
+		muted: false,
+		playbackRate: 1,
+		seeking: false,
+		seekable: 0,
+		duration: 0,
+		currentTime: 0,
+		readyState: 0,
+		networkState: 0,
+		videoWidth: 0,
+		videoHeight: 0,
+		autoplay: false,
+		loop: false,
+		poster: "",
+		src: ""
 	};
 
 
 
 
+	fileInfo = ref<{
+		name: string;
+		size: number;
+		type: string;
+	}>();
+
 
 	constructor(readonly url: string) {
-		this.uuid = VideoItem.generateUUID();
+		super();
+		
 		this.src = url;
-		this.state = {
-			title: "",
-			favicon: "",
-			playing: false,
-			loading: false,
-			ended: false,
-			controls: true,
-			volume: 1,
-			muted: false,
-			playbackRate: 1,
-			seeking: false,
-			seekable: 0,
-			duration: 0,
-			currentTime: 0,
-			readyState: 0,
-			networkState: 0,
-			videoWidth: 0,
-			videoHeight: 0,
-			autoplay: false,
-			loop: false,
-			poster: "",
-			src: ""
-		}
+		this.init();
+
+		this.name = url.replace(/(.*\/)*([^.]+).*/ig, "$2");
 	}
 
 
@@ -102,7 +111,7 @@ export default class VideoItem {
 				'Content-Type': 'application/json',
 			},
 		});
-		const fileInfo = await res.json();
+		this.fileInfo.value = await res.json();
 	}
 
 

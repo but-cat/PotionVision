@@ -92,12 +92,15 @@ function openVideo(item: FileItem) {
 	];
 
 
-	if(mimeList.includes(item.mime)) router.push({
-		path: 'video',
-		query: {
-			url: item.url,
-		},
-	});
+	if(mimeList.includes(item.mime)) {
+		router.push({
+			path: 'video',
+			query: {
+				url: item.url,
+			},
+		});
+		window.dispatchEvent(new CustomEvent('open-video', { detail: { url: item.url } }));
+	}
 }
 
 </script>

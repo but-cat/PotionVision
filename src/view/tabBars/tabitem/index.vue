@@ -1,12 +1,12 @@
 <template>
-	<li @click.stop="emit('active')" @contextmenu.stop="$emit('omnibox', $event)" :class="active && ['active', 'bg-white', 'dark:bg-gray-900']"
+	<li @click.stop="emit('active')" @contextmenu.stop="$emit('omnibox', $event)" :class="active ? ['active', 'bg-white', 'dark:bg-gray-900'] : ['bg-gray-50/80', 'dark:bg-gray-900/80']"
 		class="list-group-item dark:text-white text-gray-600 select-none">
 		<!-- <div @error.prevent.stop class="favicon flex justify-center items-center">
 			<Loding v-if="pageState!.loading" src="~@icon/file.svg" class="default"/>
 			<img v-else="favicon" :src="favicon"/>
 		</div> -->
 		<Favicon :favicon="pageState!.favicon" :loading="pageState!.loading" class="w-5 h-5 flex-0"/>
-		<span class="ml-2 title select-none">{{ pageState!.title }}</span>
+		<span class="ml-2 title select-none">{{ pageState!.name }}</span>
 
 		<button @click="close(page as Page, index as number)" class="close" draggable="false">
 			<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" role="img"
@@ -84,6 +84,7 @@ onMounted(() => {
 
 	border-left: 1px solid var(--disabledBackground);
 
+	border-radius: 4px;
 
 
 	* {
@@ -104,8 +105,8 @@ onMounted(() => {
 	}
 
 	&.active {
-		border-radius: 4px 4px 0 0;
-		// border-radius: 4px;
+		// border-radius: 4px 4px 0 0;
+		border-radius: 4px;
 		// background-color: var(--background);
 		box-shadow: 0 0 8px var(--disabledBackground);
 		// border-right: none;

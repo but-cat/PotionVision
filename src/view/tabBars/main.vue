@@ -2,144 +2,65 @@
 	<draggable @changePosition="changePosition" class="list-group" v-bind="{ ...$attrs, ...dragOptions }" @start="drag = true" @end="drag = false">
 		<!-- @changePosition="data => $emit('changePosition', data)" -->
 		<transition-group name="flip-list" type="transition">
-			<Tabitem v-for="(page, index) in browserList" :key="page.uuid" :page="page" :index="index" :active="activePage!.includes(page)" @mousedown="openOmnibox($event, page)" @active="setActive(index)" @omnibox="setActiveFile" @close="$emit('close', page, index)" />
+			<Tabitems v-for="(page, index) in tabList" :key="page.uuid" :page="page" :index="index" :active="activeItem!.includes(page)" @active="setActive(index)" @close="$emit('close', page, index)" />
 		</transition-group>
 	</draggable>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { reactive, ref, toRefs, computed, watch, onMounted, nextTick, getCurrentInstance } from 'vue';
 import { defineComponent, PropType } from 'vue';
 import draggable from './draggable.vue';
+import TabItem from "./interface";
+import Tabitems from './tabitem/index.vue';
 
-import Page from "./interface";
+const emit = defineEmits(['changePosition', 'menu', 'close', 'active']);
 
-import Tabitem from './tabitem/index.vue';
+const props = defineProps<{
+	tabList: TabItem[];
+	activeItem: TabItem[];
+}>();
 
-export default defineComponent({
-	emits: ['changePosition', 'menu', 'close', 'active'],
-
-	props: {
-		browserList: Array as PropType<Page[]>,
-		activePage: Array as PropType<Page[]>,
-	},
-
-	computed: {
-		dragOptions() {
-			return {
-				animation: 200,
-				group: 'description',
-				disabled: false,
-				ghostClass: 'ghost',
-			};
-		},
-	},
-
-	data() {
-		return {
-			// list: message.map((name, index) => {
-			// 	return { name, order: index + 1 };
-			// }),
-			drag: false,
-
-
-
-			multiple: false,
-
-			// page: null as Page | null,
-			openMenu: false,
-			position: {
-				page: null as Page | null,
-				left: 0,
-				top: 0,
-			},
-
-			// searchBar: false,
-
-			isDev: process.env.NODE_ENV === 'development',
-		};
-	},
-	methods: {
-		setActive(item?: number | Page) {
-			const page: Page = typeof item == 'number' ? this.browserList![item] : (item as Page);
-
-			if (this.activePage!.includes(page)) return;
-
-			const pageIndex = this.browserList!.findIndex((i) => i == page);
-			this.$emit('active', pageIndex);
-		},
-
-		openOmnibox(event: MouseEvent, item?: number | Page) {
-			console.log('openOmnibox', item);
-			if(event.button !== 2) return;
-			
-			
-			const page: Page = typeof item == 'number' ? this.browserList![item] : (item as Page);
-			const remote = require('@electron/remote');
-			const win: any = remote.getCurrentWindow() as any;
-			
-			win.view.openModal('browser-omnibox', {
-				url: page.uuid,
-			});
-		},
-
-		/**
-		 * @deprecated
-		 */
-		close(item: Page, index: number) {
-			this.$emit('close', item, index);
-		},
-
-		/**
-		 * @deprecated
-		 */
-		newPage(url: string = 'https://www.bing.com', uuid?: string) {
-			if (uuid) {
-				const page = this.browserList?.find((page) => page.uuid == uuid);
-				if (!page) return;
-				page?.loadUrl(url);
-				return;
-			} else {
-				const page = new Page(url);
-				const index = this.browserList!.push(page);
-
-				page.addEventListener(
-					'change',
-					(event: Event) => {
-						this.setActive(index - 1);
-						this.$forceUpdate();
-					},
-					{ once: true },
-				);
-			}
-		},
-
-		changePosition({ item, target }: { item: number; target: number }) {
-			[this.browserList![item], this.browserList![target]] = [this.browserList![target], this.browserList![item]];
-		},
-
-		setActiveFile(event: PointerEvent) {
-			const page = this.activePage![0];
-			if (!page) return;
-			
-			const remote = require('@electron/remote');
-			const win: any = remote.getCurrentWindow() as any;
-			
-			win.view.openModal('browser-menu', {
-				uuid: page.uuid,
-				left: event.clientX + 10,
-				top: event.clientY + 10,
-			});
-		},
-	},
-	mounted() {
-		(window as any).vm = this;
-	},
-	components: {
-		BrowserMenu,
-		draggable,
-		Tabitem,
-	},
+const dragOptions = computed(() => {
+	return {
+		animation: 200,
+		group: 'description',
+		disabled: false,
+		ghostClass: 'ghost',
+	};
 });
+
+const drag = ref(false);
+const multiple = ref(false);
+const openMenu = ref(false);
+const position = ref({
+	page: null as TabItem | null,
+	left: 0,
+	top: 0,
+});
+
+const isDev = process.env.NODE_ENV === 'development';
+
+function setActive(item?: number | TabItem) {
+	const page: TabItem = typeof item == 'number' ? props.tabList[item] : (item as TabItem);
+
+	if (props.activeItem.includes(page)) return;
+
+	const pageIndex = props.tabList.findIndex((i) => i == page);
+	emit('active', pageIndex);
+}
+
+
+function changePosition({ item, target }: { item: number; target: number }) {
+	[props.tabList[item], props.tabList[target]] = [props.tabList[target], props.tabList[item]];
+}
+
+// changePosition({ item, target }: { item: number; target: number }) {
+// 	[this.tabList![item], this.tabList![target]] = [this.tabList![target], this.tabList![item]];
+// },
+
+		
+		
 </script>
 
 <style lang="less" scoped>
@@ -156,10 +77,10 @@ export default defineComponent({
 	overflow-y: hidden;
 
 	display: flex;
-	justify-content: flex-end;
+	justify-content: flex-start;
 
-	// align-items: center;
-	align-items: flex-end;
+	align-items: center;
+	// align-items: flex-end;
 
 	& > span {
 		height: 100%;
