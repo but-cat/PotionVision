@@ -1,6 +1,6 @@
 <template>
 	<div class="w-full h-full flex flex-col overflow-hidden">
-		<div class="w-full h-14 px-4 py-2 bg-white relative flex items-center shadow-sm">
+		<div class="w-full h-24 px-4 py-2 pt-12 bg-white relative flex items-center shadow-sm">
 			<div class="w-48">
 				<button @click="back" class="w-10 h-10 text-xs leading-none rounded-full">
 					<svg class="m-auto" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

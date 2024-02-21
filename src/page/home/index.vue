@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full bg-gray-50/60 dark:bg-gray-900/40 relative isolate overflow-hidden">
+	<div class="w-full h-full pt-10 bg-gray-50/60 dark:bg-gray-900/40 relative isolate overflow-hidden">
 		<!-- <img src="https://cn.bing.com/th?id=OHR.FolegandrosGreece_ZH-CN7803666477_1920x1080.webp&qlt=50" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover object-right md:object-center" /> -->
 		
 		<div class="w-full h-full py-32 overflow-auto">

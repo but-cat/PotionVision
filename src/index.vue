@@ -10,15 +10,19 @@
 			<div v-else class="h-full w-full absolute sm:right-1/2 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl" aria-hidden="true">
 				<div class="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
 			</div>
-			<div class="w-full h-full z-10">
-				<router-view v-slot="{ Component }">
-					<Transition name="fade-transform" mode="out-in">
-						<!-- <KeepAlive> -->
-							<component :is="Component" />
-						<!-- </KeepAlive> -->
-					</Transition>
-				</router-view>
+			<div class="w-full h-full flex flex-col overflow-hidden">
+				<TabBars class="w-full h-10 absolute top-0 left-0"/>
+				<div class="w-full flex-1 z-10 overflow-hidden" style="--nav-bars-heigth: 2.5rem">
+					<router-view v-slot="{ Component }">
+						<Transition name="fade-transform" mode="out-in">
+							<!-- <KeepAlive> -->
+								<component :is="Component" />
+							<!-- </KeepAlive> -->
+						</Transition>
+					</router-view>
+				</div>
 			</div>
+			
 			
 		</div>
 	</div>
@@ -33,7 +37,8 @@ import { defineComponent, reactive, ref, getCurrentInstance, onMounted } from 'v
 // import NavBar from '@/view/navBars/index.vue';
 import NavBar from '@/view/navBars/NavBars.vue';
 import NewsBar from '@/view/newsBar/index.vue';
-// import AppMenu from '@/view/appMenu/index.vue';
+
+import TabBars from '@/view/tabBars/index.vue';
 
 const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties;

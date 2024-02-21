@@ -114,6 +114,9 @@ export default defineComponent({
 	methods: {
 		dark() {
 			document.body.classList.toggle('dark');
+			const remote = require('@electron/remote');
+			const win: any = remote.getCurrentWindow() as any;
+			win.themeSource = document.body.classList.contains('dark') ? 'dark' : 'light';
 		},
 		video() {
 			this.$router.push({

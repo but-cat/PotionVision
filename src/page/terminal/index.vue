@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full bg-gray-50/80 dark:bg-gray-900/60 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
+	<div class="w-full h-full pt-10 bg-gray-50/80 dark:bg-gray-900/60 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
 		<!-- <Nodelist/> -->
 		<!-- <Filelist/> -->
 		<div ref="terminalEl" class="w-full mb-10 flex-1 overflow-hidden"></div>
