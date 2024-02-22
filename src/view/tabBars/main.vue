@@ -2,7 +2,7 @@
 	<draggable @changePosition="changePosition" class="list-group" v-bind="{ ...$attrs, ...dragOptions }" @start="drag = true" @end="drag = false">
 		<!-- @changePosition="data => $emit('changePosition', data)" -->
 		<transition-group name="flip-list" type="transition">
-			<Tabitems v-for="(page, index) in tabList" :key="page.uuid" :page="page" :index="index" :active="activeItem!.includes(page)" @active="setActive(index)" @close="$emit('close', page, index)" />
+			<Tabitems v-for="(item, index) in tabList" :key="item" :uuid="item" :index="index" :active="active == item"/>
 		</transition-group>
 	</draggable>
 </template>
@@ -14,12 +14,21 @@ import draggable from './draggable.vue';
 import TabItem from "@/store/page/tabItem";
 import Tabitems from './tabitem/index.vue';
 
+import { useStore } from 'vuex';
+const store = useStore();
+
 const emit = defineEmits(['changePosition', 'menu', 'close', 'active']);
 
 const props = defineProps<{
-	tabList: TabItem[];
-	activeItem: TabItem[];
+	
 }>();
+
+
+const tabList = computed(() => store.state.page.tabList);
+
+
+const active = computed(() => store.state.page.activeTab);
+
 
 const dragOptions = computed(() => {
 	return {
@@ -31,36 +40,15 @@ const dragOptions = computed(() => {
 });
 
 const drag = ref(false);
-const multiple = ref(false);
-const openMenu = ref(false);
-const position = ref({
-	page: null as TabItem | null,
-	left: 0,
-	top: 0,
-});
-
-const isDev = process.env.NODE_ENV === 'development';
-
-function setActive(item?: number | TabItem) {
-	const page: TabItem = typeof item == 'number' ? props.tabList[item] : (item as TabItem);
-
-	if (props.activeItem.includes(page)) return;
-
-	const pageIndex = props.tabList.findIndex((i) => i == page);
-	emit('active', pageIndex);
-}
-
 
 function changePosition({ item, target }: { item: number; target: number }) {
-	[props.tabList[item], props.tabList[target]] = [props.tabList[target], props.tabList[item]];
+	// [props.tabList[item], props.tabList[target]] = [props.tabList[target], props.tabList[item]];
+	const belTabList = tabList.value;
+	const [a, b] = [belTabList[item], belTabList[target]];
+	belTabList[item] = b;
+	belTabList[target] = a;
+	store.commit('page/setTabList', belTabList);
 }
-
-// changePosition({ item, target }: { item: number; target: number }) {
-// 	[this.tabList![item], this.tabList![target]] = [this.tabList![target], this.tabList![item]];
-// },
-
-		
-		
 </script>
 
 <style lang="less" scoped>

@@ -3,7 +3,7 @@
 		<p class=" text-lg leading-8 text-gray-600 dark:text-gray-400">观看历史</p>
 		<div class="flex flex-wrap -mx-1 lg:-mx-4">
 			<div v-for="(item, index) in fileList" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-				<article class="h-60 flex flex-col overflow-hidden rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700">
+				<article class="max-w-80 h-60 m-auto flex flex-col overflow-hidden rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700">
 					<div @click="openVideo(item)" class="block w-full h-36 relative" style="background-color: black">
 						<video :src="item.url" class="w-full h-full" alt="Placeholder" width="600" height="400" style="object-fit: cover;"/>
 						<svg class="w-12 h-12 absolute left-0 right-0 top-4 bottom-0 m-auto" viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

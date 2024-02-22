@@ -7,23 +7,25 @@ import PageState from "./state";
 import TabItem from "./tabItem";
 
 const state = {
-	tabList: new Map<string, TabItem>(),
+	tabSet: new Map<string, TabItem>(),
+	tabList: [],
 	activeTab: "",
 }
 
 
 const mutations: MutationTree<PageState> = {
 
-	addItem(state, url: string) {
+	addTabItem(state, url: string) {
 		const item: TabItem = new TabItem(url);
-		state.tabList.set(item.uuid, item);
+		state.tabSet.set(item.uuid, item);
 		state.activeTab = item.uuid;
+		state.tabList.push(item.uuid);
 	},
 
 
-	setTabList(state, item: TabItem) {
+	setTabList(state, item: string[]) {
 		console.log('file: ', item);
-		state.tabList.set(item.uuid, item);
+		state.tabList = item;
 	},
 
 	setActiveTab(state, item: TabItem) {
@@ -31,9 +33,20 @@ const mutations: MutationTree<PageState> = {
 	},
 
 
+	setActiveTabUUID(state, uuid: string) {
+		state.activeTab = uuid;
+	},
 
-	delTabItem(state, item: TabItem) {
-		state.tabList.delete(item.uuid);
+
+
+	delTabItem(state, uuid: string) {
+		state.tabSet.delete(uuid);
+		const index = state.tabList.indexOf(uuid);
+		state.tabList.splice(index, 1);
+
+		if (state.activeTab === uuid) {
+			state.activeTab = state.tabList[0];
+		}
 	},
 }
 

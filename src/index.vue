@@ -12,7 +12,7 @@
 			</div>
 			<div class="w-full h-full flex flex-col overflow-hidden relative">
 				<TabBars ref="tabBar" class="w-full h-10 absolute top-0 left-0 z-10"/>
-				<div class="w-full flex-1 z-20 overflow-hidden" style="--nav-bars-heigth: 2.5rem">
+				<div class="w-full flex-1 overflow-hidden" style="--nav-bars-heigth: 2.5rem">
 					<router-view v-slot="{ Component }">
 						<Transition name="fade-transform" mode="out-in">
 							<!-- <KeepAlive> -->
@@ -123,7 +123,12 @@ body,
 
 
 .nplayer.nplayer-web-full {
-	z-index: 1000;
+	// position: absolute;
+	z-index: 10000;
+
+	// * {
+	// 	z-index: 1000;
+	// }
 
 	&::before {
 		content: '';

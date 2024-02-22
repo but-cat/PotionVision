@@ -1,5 +1,5 @@
 <template>
-	<li @click.stop="emit('active')" @contextmenu.stop="$emit('omnibox', $event)" :class="active ? ['active', 'bg-white', 'dark:bg-gray-900'] : ['bg-gray-50/80', 'dark:bg-gray-900/80']"
+	<li @click.stop="setActiveItem" @contextmenu.stop="$emit('omnibox', $event)" :class="active ? ['active', 'bg-white', 'dark:bg-gray-900'] : ['bg-gray-50/80', 'dark:bg-gray-900/80']"
 		class="list-group-item dark:text-white text-gray-600 select-none">
 		<!-- <div @error.prevent.stop class="favicon flex justify-center items-center">
 			<Loding v-if="pageState!.loading" src="~@icon/file.svg" class="default"/>
@@ -8,7 +8,7 @@
 		<!-- <Favicon :favicon="pageState!.favicon" :loading="pageState!.loading" class="w-5 h-5 flex-0"/> -->
 		<span class="ml-2 title select-none">{{ pageState!.title }}</span>
 
-		<button @click="close(page as TabItem, index as number)" class="close" draggable="false">
+		<button @click="closeItem" class="close" draggable="false">
 			<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" role="img"
 				class="icon icon-16 fill-current">
 				<path fill="currentColor"
@@ -25,6 +25,9 @@ import Loding from "./loding.vue";
 import defaultFavicon from "@icon/file.svg";
 import Favicon from "../favicon/index.vue";
 
+import { useStore } from 'vuex';
+const store = useStore();
+
 const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties!;
 const $xhr = globalProperties.$xhr;
@@ -33,20 +36,29 @@ const emit = defineEmits(['close', 'active', 'omnibox']);
 
 
 const props = defineProps<{
-	page: TabItem;
-	index: number;
-	active: boolean;
+	uuid: string;
 }>();
-const { page, index, active } = toRefs(props);
+const { uuid } = toRefs(props);
 
-const favicon = ref<string>(defaultFavicon);
+
+
+// const page = ref<TabItem>(new TabItem('assets://project.local/[ANi] 葬送的芙莉蓮 - 05 [1080P][Baha][WEB-DL][AAC AVC][CHT][V2].mp4'));
+
+const page = computed(() => store.state.page.tabSet.get(uuid.value)!);
+
+const active = computed(() => store.state.page.activeTab == uuid.value);
+
 const pageState = computed(() => page.value!.state);
 
-function close(page: TabItem, index: number) {
-	console.log("close", page, index);
-	emit('close', page, index)
+
+function setActiveItem() {
+	store.commit('page/setActiveTabUUID', uuid.value);
 }
 
+
+function closeItem() {
+	store.commit('page/delTabItem', uuid.value);
+}
 
 onMounted(() => {
 	// page.value!.addEventListener('change', () => {
