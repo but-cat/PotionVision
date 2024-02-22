@@ -45,7 +45,7 @@ const mutations: MutationTree<PageState> = {
 		state.tabList.splice(index, 1);
 
 		if (state.activeTab === uuid) {
-			state.activeTab = state.tabList[0];
+			state.activeTab = "";
 		}
 	},
 }

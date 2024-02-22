@@ -21,6 +21,12 @@
 						</Transition>
 					</router-view>
 				</div>
+
+
+				
+
+
+				
 			</div>
 			
 			
@@ -32,16 +38,19 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, reactive, ref, getCurrentInstance, onMounted } from 'vue';
-// import NPlayer from './view/player.vue';
-// import NavBar from '@/view/navBars/index.vue';
+import { defineComponent, reactive, ref, computed, getCurrentInstance, onMounted } from 'vue';
+import { useStore } from 'vuex';
+
 import NavBar from '@/view/navBars/NavBars.vue';
 import NewsBar from '@/view/newsBar/index.vue';
-
 import TabBars from '@/view/tabBars/index.vue';
+
+const store = useStore();
 
 const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties;
+
+const active = computed(() => store.state.page.activeTab);
 
 const tabBar = ref<typeof TabBars>();
 
