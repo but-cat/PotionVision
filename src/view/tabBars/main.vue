@@ -11,7 +11,7 @@
 import { reactive, ref, toRefs, computed, watch, onMounted, nextTick, getCurrentInstance } from 'vue';
 import { defineComponent, PropType } from 'vue';
 import draggable from './draggable.vue';
-import TabItem from "./interface";
+import TabItem from "@/store/page/tabItem";
 import Tabitems from './tabitem/index.vue';
 
 const emit = defineEmits(['changePosition', 'menu', 'close', 'active']);

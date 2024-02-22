@@ -5,10 +5,10 @@
 			<Loding v-if="pageState!.loading" src="~@icon/file.svg" class="default"/>
 			<img v-else="favicon" :src="favicon"/>
 		</div> -->
-		<Favicon :favicon="pageState!.favicon" :loading="pageState!.loading" class="w-5 h-5 flex-0"/>
-		<span class="ml-2 title select-none">{{ pageState!.name }}</span>
+		<!-- <Favicon :favicon="pageState!.favicon" :loading="pageState!.loading" class="w-5 h-5 flex-0"/> -->
+		<span class="ml-2 title select-none">{{ pageState!.title }}</span>
 
-		<button @click="close(page as Page, index as number)" class="close" draggable="false">
+		<button @click="close(page as TabItem, index as number)" class="close" draggable="false">
 			<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" role="img"
 				class="icon icon-16 fill-current">
 				<path fill="currentColor"
@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { ref, toRefs, computed, watch, onMounted, getCurrentInstance } from 'vue';
-import Page from "../interface";
+import TabItem from "@/store/page/tabItem";
 import Loding from "./loding.vue";
 import defaultFavicon from "@icon/file.svg";
 import Favicon from "../favicon/index.vue";
@@ -33,7 +33,7 @@ const emit = defineEmits(['close', 'active', 'omnibox']);
 
 
 const props = defineProps<{
-	page: Page;
+	page: TabItem;
 	index: number;
 	active: boolean;
 }>();
@@ -42,7 +42,7 @@ const { page, index, active } = toRefs(props);
 const favicon = ref<string>(defaultFavicon);
 const pageState = computed(() => page.value!.state);
 
-function close(page: Page, index: number) {
+function close(page: TabItem, index: number) {
 	console.log("close", page, index);
 	emit('close', page, index)
 }
