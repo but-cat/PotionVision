@@ -25,28 +25,21 @@ const props = defineProps<{
 
 
 const tabList = computed(() => store.state.page.tabList);
-
-
 const active = computed(() => store.state.page.activeTab);
 
 
-const dragOptions = computed(() => {
-	return {
-		animation: 200,
-		group: 'description',
-		disabled: false,
-		ghostClass: 'ghost',
-	};
-});
+const dragOptions = computed(() => ({
+	animation: 200,
+	group: 'description',
+	disabled: false,
+	ghostClass: 'ghost',
+}));
 
 const drag = ref(false);
 
 function changePosition({ item, target }: { item: number; target: number }) {
-	// [props.tabList[item], props.tabList[target]] = [props.tabList[target], props.tabList[item]];
 	const belTabList = tabList.value;
-	const [a, b] = [belTabList[item], belTabList[target]];
-	belTabList[item] = b;
-	belTabList[target] = a;
+	[belTabList[item], belTabList[target]] = [belTabList[target], belTabList[item]];
 	store.commit('page/setTabList', belTabList);
 }
 </script>

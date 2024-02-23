@@ -102,6 +102,7 @@ export default defineComponent({
 
 				const slider = this.cloneEl as HTMLElement;
 				this.originPos = event.pageX - this.lastPos;
+				// this.originPos = event.pageX - (this.lastPos - target.getBoundingClientRect().width/2);
 				this.dragging = true;
 				this.pointerId = event.pointerId;
 				// slider.requestPointerLock();
@@ -127,7 +128,7 @@ export default defineComponent({
 
 			setTimeout(() => {
 				this.cloneEl = null;
-				targetEl!.style.opacity = '1';
+				if(targetEl) targetEl!.style.opacity = '1';
 				cloneEl && cloneEl.remove();
 			}, 400);
 			cloneEl.addEventListener('transitionstart', () => {
@@ -136,14 +137,14 @@ export default defineComponent({
 					this.cloneEl = null;
 					cloneEl!.remove();
 
-					targetEl!.style.opacity = '1';
+					if(targetEl) targetEl!.style.opacity = '1';
 					// targetEl!.removeAttribute("style");
 				}, { once: true });
 			}, { once: true });
 
 			cloneEl.classList.add('is_return');
 			// cloneEl.style.transform = `translate(0px)`;
-			cloneEl.style.transform = `translate(${targetEl!.offsetLeft - cloneEl?.offsetLeft}px)`;
+			if(targetEl) cloneEl.style.transform = `translate(${targetEl!.offsetLeft - cloneEl?.offsetLeft}px)`;
 
 
 			this.originPos = 0;
@@ -173,7 +174,11 @@ export default defineComponent({
 					return [start, end];
 				});
 
+				
+				
+
 				const lastPos = event.clientX;
+				console.log("grid", event.clientX, grid);
 				const targetIndex = Array.from(this.targetEl!.parentElement!.children).indexOf(this.targetEl as HTMLElement);
 				const index = grid.findIndex(([start, end]) => lastPos >= start && lastPos <= end);
 				// console.log("index", index);
