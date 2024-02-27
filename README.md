@@ -61,6 +61,11 @@ yarn build:win
 
 [node 进程退出](https://blog.onekuma.cn/death-of-a-node-process)
 
+
+[aria2 方法](https://aria2.github.io/manual/en/html/aria2c.html#aria2.unpause)
+
+[aria2 启动](https://aria2.github.io/manual/en/html/aria2c.html#parameterized-uri-support)
+
 ### `tailwind`
 
 [tailwindcss](https://tailwindcss.com/docs/overflow)
