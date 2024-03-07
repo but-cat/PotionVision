@@ -1,6 +1,6 @@
 <template>
 
-	<div class="w-full h-full p-12 pt-10 overflow-auto bg-gray-50">
+	<div class="w-full h-full p-12 overflow-auto bg-gray-50">
 		<div class="space-y-12">
 			<appearance :options="setting.appearance"/>
 		</div>

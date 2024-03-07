@@ -1,5 +1,5 @@
 <template>
-	<div class="video w-full h-full pt-10 flex flex-col overflow-hidden">
+	<div class="video w-full h-full flex flex-col overflow-hidden">
 		<div :style="{ flex: `0 0 ${heightData}`, height: heightData }" class="relative bg-gray-50 bg-gray-800">
 			<NPlayer v-if="videoOptions.url" :url="videoOptions.url" :time="videoOptions.time" :danmaku="videoOptions.danmaku" />
 			<!-- <video :src="options.url" class="w-full h-full" controls></video> -->

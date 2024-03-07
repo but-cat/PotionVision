@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full pt-10 flex-0 bg-gray-100/40 dark:bg-gray-900/40 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
+	<div class="w-full h-full flex-0 bg-gray-100/40 dark:bg-gray-900/40 dark:text-white text-gray-600 flex overflow-hidden text-sm relative">
 		<!-- <Filelist /> -->
 
 		<div class="flex-1 h-full relative  text-gray-300 dark:text-gray-800 overflow-hidden">
