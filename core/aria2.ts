@@ -26,16 +26,14 @@ export default class Asia2 extends Aria2Client {
 	videoPath = upath.normalize(app.getPath('videos') ?? '');
 
 
-	constructor(port = 6851) {
-		// if(Asia2.instance) return Asia2.instance;
-
+	static openArria2c(port: number) {
 		const aria2c_Mac = is.dev ? upath.join(__dirname, '../renderer/extra/darwin/arm64/engine/aria2c') : upath.join(__dirname, '../../../app.asar.unpacked/public/extra/darwin/arm64/engine/aria2c');
 		const aria2c_Win = is.dev ? upath.join(__dirname, '../renderer/extra/win32/x64/engine/aria2c.exe') : upath.join(__dirname, '../../../app.asar.unpacked/public/extra/win32/x64/engine/aria2c.exe');
 
 		const aria2c = Asia2.isMac ? aria2c_Mac : aria2c_Win;
 
 		const options = `--enable-rpc --rpc-listen-all=true --rpc-allow-origin-all --rpc-listen-port=${port}`;
-		exec(`${aria2c} ${options}`, (error, stdout, stderr) => {
+		return exec(`${aria2c} ${options}`, (error, stdout, stderr) => {
 			if (error) {
 				console.error(`exec error: ${error}`);
 				return;
@@ -44,6 +42,18 @@ export default class Asia2 extends Aria2Client {
 			console.error(`stderr: ${stderr}`);
 		});
 
+	}
+
+
+
+	child_process: any;
+
+
+	constructor(public readonly port = 6851) {
+		// if(Asia2.instance) return Asia2.instance;
+
+		const child_process = Asia2.openArria2c(port);
+
 		super({
 			host: 'localhost',
 			port,
@@ -51,6 +61,7 @@ export default class Asia2 extends Aria2Client {
 			path: '/jsonrpc',
 		});
 
+		this.child_process = child_process;
 
 		// this.aria2 = new Aria2Client({
 		// 	host: 'localhost',
@@ -107,6 +118,23 @@ export default class Asia2 extends Aria2Client {
 	// }
 	tellStatus(): Promise<any> {
 		return super.call('tellStatus');
+	}
+
+
+
+	reload(): Promise<any> {
+		console.log('reload 杀死进程');
+		
+		this.child_process.kill();
+		this.child_process = Asia2.openArria2c(this.port);
+		return Promise.resolve();
+	}
+
+
+	kill(): Promise<any> {
+		console.log('kill 杀死进程');
+		this.child_process.kill();
+		return Promise.resolve();
 	}
 }
 

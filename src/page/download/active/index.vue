@@ -69,6 +69,21 @@
 import { reactive, ref, toRefs, computed, onMounted, watch, getCurrentInstance, onBeforeUnmount } from 'vue';
 import { filesize } from "filesize";
 
+const emit = defineEmits(['update:exception']);
+const props = defineProps({
+	exception: {
+		type: Boolean,
+		default: false,
+	},
+});
+const exception = computed({
+	get() {
+		return props.exception;
+	},
+	set(value) {
+		emit('update:exception', value);
+	},
+});
 
 interface TellActiveItem {
 
@@ -136,8 +151,10 @@ async function pause(item: TellActiveItem) {
 		});
 		const data = await res.json();
 		pauseSet.add(item.gid);
+		exception.value = false;
 	} catch (error) {
 		console.log(error);
+		exception.value = true;
 	}
 }
 
@@ -149,8 +166,10 @@ async function getTellActive() {
 		// console.log("data", data);
 
 		tellActive.value = data;
+		exception.value = false;
 	} catch (error) {
 		console.log(error);
+		exception.value = true;
 	}
 }
 

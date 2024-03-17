@@ -1,12 +1,12 @@
 <template>
 	<div class="w-full h-full flex flex-col dark:text-white bg-gray-50/80 dark:bg-gray-900/60 overflow-hidden">
 		
-		<HeadBar v-model="tellType"/>
+		<HeadBar v-model="tellType" :exception="exception"/>
 		
 		
 		<!-- <TellActiveList /> -->
 
-		<component :is="componentMap.get(tellType)" />
+		<component :is="componentMap.get(tellType)" v-model:exception="exception"/>
 
 		
 	</div>
@@ -37,7 +37,7 @@ const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties;
 const $xhr = globalProperties!.$xhr;
 
-
+const exception = ref<boolean>(false);
 
 
 const tellType = ref<string>('tellActive');

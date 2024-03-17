@@ -123,4 +123,31 @@ export default class progress extends Applet {
 			statusText: 'OK',
 		});
 	}
+
+
+
+
+	/**
+	 * 获取活动的下载
+	 * @param { string } uuid
+	 * @returns
+	 */
+	@useGet
+	reloadAria2() {
+		console.log('getPage');
+
+		const { session, url, body, domain, authority, scheme, host, port } = this.context;
+
+		const apps = session.Apps;
+		const { asia2 } = apps;
+
+
+		const data = asia2.reload();
+
+		return new Response(JSON.stringify(data), {
+			headers: { 'content-type': 'text/html' },
+			status: 200,
+			statusText: 'OK',
+		});
+	}
 }

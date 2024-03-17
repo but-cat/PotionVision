@@ -67,6 +67,22 @@ import { filesize } from "filesize";
 import ErrorModal from "./error.vue";
 
 
+const emit = defineEmits(['update:exception']);
+const props = defineProps({
+	exception: {
+		type: Boolean,
+		default: false,
+	},
+});
+const exception = computed({
+	get() {
+		return props.exception;
+	},
+	set(value) {
+		emit('update:exception', value);
+	},
+});
+
 interface TellActiveItem {
 
 	bittorrent: {												// Struct，其中包含从.torrent检索到的信息 （文件）。仅限 BitTorrent。它包含以下键。
@@ -125,8 +141,10 @@ async function getTellActive() {
 		// console.log("data", data);
 
 		tellActive.value = data;
+		exception.value = false;
 	} catch (error) {
 		console.log(error);
+		exception.value = true;
 	}
 }
 

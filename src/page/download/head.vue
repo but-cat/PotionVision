@@ -1,5 +1,5 @@
 <template>
-	<nav class="bg-white dark:bg-gray-800 pt-10 z-5">
+	<nav class="bg-white dark:bg-gray-800 z-5">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex h-16 items-center justify-between">
 				<div class="flex items-center">
@@ -19,11 +19,19 @@
 							<button @click="menuOpen = !menuOpen" type="button" class="bg-gray-100 dark:bg-gray-900 relative flex max-w-xs items-center rounded-full text-sm">
 								<!-- <span class="absolute -inset-1.5"></span>
 								<span class="sr-only">Open user menu</span> -->
-								<div class="h-8 w-8 p-2 rounded-full flex justify-center items-center">
+								<div class="h-8 w-8 p-2 rounded-full flex justify-center items-center relative">
 									<svg class="w-full h-full" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 										<path d="M10 2.5C10 2.22386 9.77614 2 9.5 2C9.22386 2 9 2.22386 9 2.5V9H2.5C2.22386 9 2 9.22386 2 9.5C2 9.77614 2.22386 10 2.5 10H9V16.5C9 16.7761 9.22386 17 9.5 17C9.77614 17 10 16.7761 10 16.5V10H16.5C16.7761 10 17 9.77614 17 9.5C17 9.22386 16.7761 9 16.5 9H10V2.5Z" />
 									</svg>
+
+									<template v-if="exception">
+										<span class="sr-only">Notifications</span>
+										<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+										<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full animate-ping"></span>
+									</template>
 								</div>
+
+								
 							</button>
 
 							<div v-if="menuOpen" @click="menuOpen = false" class="fixed inset-0 bg-gray-500 bg-opacity-25 transition-opacity"></div>
@@ -32,6 +40,7 @@
 								<a @click="openAddUrl = true" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">添加新任务</a>
 								<a @click="call(['pauseAll'])" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">暂停所有任务</a>
 								<a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">恢复所有任务</a>
+								<a v-if="exception" @click="reloadAria2" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">重启aria2</a>
 							</div>
 						</div>
 					</div>
@@ -49,16 +58,33 @@ import { reactive, ref, toRefs, computed, onMounted, watch, getCurrentInstance, 
 // import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import AddUrl from './addUrl.vue';
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:exception']);
 const props = defineProps({
 	modelValue: {
 		type: String,
 		default: false,
 	},
+	exception: {
+		type: Boolean,
+		default: false,
+	},
 });
+
+const exception = computed({
+	get() {
+		return props.exception;
+	},
+	set(value) {
+		emit('update:exception', value);
+	},
+});
+
+
+
 
 const openAddUrl = ref<boolean>(false);
 const menuOpen = ref<boolean>(false);
+// const exception = ref<boolean>(false);
 
 const tellType = computed({
 	get() {
@@ -87,6 +113,24 @@ async function call(parameter: any[]) {
 			},
 			body: JSON.stringify(parameter),
 		});
+		exception.value = false;
+	} catch (error) {
+		exception.value = true;
+	}
+}
+
+
+async function reloadAria2() {
+	try {
+		await fetch('apps://download.api/progress/reloadAria2', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			// body: JSON.stringify(parameter),
+		});
 	} catch (error) {}
 }
+
 </script>

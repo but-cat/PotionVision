@@ -13,6 +13,7 @@ import Terminal from "@/page/terminal/router";
 
 
 import Setting from "./setting/router";
+import Settings from "./settings/router";
 
 export default [
 	
@@ -28,5 +29,8 @@ export default [
 
 	Terminal,														// 终端
 
-	Setting,														// 设置
+	// Setting,														// 设置
+	Settings,														// 设置
+
+	// { path: '*', redirect: '/home' }
 ];
