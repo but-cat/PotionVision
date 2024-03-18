@@ -12,6 +12,8 @@
 
 - [*] 通过 NPlayer 播放视频与弹幕
 
+- [ ] 集成 ffmpeg 实现实时转码
+
 - [ ] 开发RSS订阅功能
 
 - [ ] 开发定时任务功能
@@ -19,6 +21,8 @@
 - [*] 开发文件浏览器
 
 - [ ] 开发内置浏览器
+
+- [ ] 开发移动端网页播放器功能
 
 ## 开发与构建
 
@@ -79,3 +83,12 @@ yarn build:win
 ### fluent icon
 
 [fluent icon](https://github.com/microsoft/fluentui-system-icons)
+
+
+### ffmpeg
+
+[ffmpeg](https://ffmpeg.org/)
+
+[使用ffmpeg搭建HLS直播系统](https://zhuanlan.zhihu.com/p/621163439)
+
+[3种ffmpeg-web端视频直播推流方案](https://zhuanlan.zhihu.com/p/678182775)

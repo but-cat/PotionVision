@@ -6,6 +6,7 @@ import Session from '@/Session/index';
 import upath from 'upath';
 import { join } from 'path';
 import History from './history';
+import Template from './template';
 
 export default class Setting extends Prototype {
 
@@ -17,7 +18,7 @@ export default class Setting extends Prototype {
 	}
 
 	constructor(public readonly session: Session) {
-		super(session, [History]);
+		super(session, [History, Template]);
 	}
 }
 
