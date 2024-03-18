@@ -27,6 +27,18 @@ function $xhr(url: string, options: any = {}) {
 	});
 };
 
+
+function $news(text: string, type: number = 0) {
+	window.dispatchEvent(new CustomEvent('news', {
+		detail: {
+			text,
+			type
+		}
+	}));
+};
+
+
+
 const app = createApp(App);
 
 app.use(router);
@@ -34,6 +46,9 @@ app.use(store);
 // app.use(OrbitUI);
 app.use(GlobleViewComponents);
 app.use(GlobleComponents);
+
+app.config.globalProperties.$news = $news;
+(window as any).$news = $news;
 
 app.config.globalProperties.$xhr = $xhr;
 (window as any).$xhr = $xhr;

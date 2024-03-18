@@ -1,7 +1,18 @@
 <template>
 	<div class="news-container">
 		<transition-group name="slide-fade">
-			<div v-for="(item, index) in newsList" :key="index" class="news-bar" :style="{ color: ['white', 'indianred', '#90e7aa'][item.type] }" v-html="item.text"></div>
+			<!-- <div v-for="(item, index) in newsList" :key="index" class="news-bar" :style="{ color: ['white', 'indianred', '#90e7aa'][item.type] }" v-html="item.text"></div> -->
+
+			<div v-for="(item, index) in newsList" :key="index" class="mb-3 relative inline-flex rounded-md bg-white text-[0.8125rem] font-medium leading-5 text-slate-700 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50 hover:text-slate-900">
+				<div class="flex min-w-72 px-3 py-2">
+					<!-- <svg class="mr-2.5 h-5 w-5 flex-none fill-slate-400"><path d="M5 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14l-5-2.5L5 18V4Z"></path></svg> -->
+					<svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 mr-3 flex-none stroke-slate-400">
+						<path stroke-linecap="round" fill="none" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+					</svg>
+					<span v-html="item.text"></span>
+				</div>
+				<!-- <div class="border-l border-slate-400/20 px-2.5 py-2">12k</div> -->
+			</div>
 		</transition-group>
 
 		<!-- <transition name="loader">
@@ -47,7 +58,6 @@ export default defineComponent({
 		// 	this.isLoad = isLoad;
 		// };
 
-
 		window.addEventListener('news', (event: any) => {
 			// this.$EventBus.$emit('resize', {});
 			const { text, type } = event.detail;
@@ -75,7 +85,7 @@ export default defineComponent({
 	position: fixed;
 	z-index: 100000;
 	pointer-events: none;
-	padding-top: 160px;
+	padding-top: 60px;
 
 	// background: rgba(0.2,0.2,0.2, 0.2);
 	// .flex(flex-start, center, column);
@@ -87,6 +97,7 @@ export default defineComponent({
 
 	.news-bar {
 		width: 70%;
+		max-width: 320px;
 		// height: 100%;
 		padding: 8px;
 		margin: 10px;
@@ -110,7 +121,7 @@ export default defineComponent({
 		// color:
 	}
 
-	&>span {
+	& > span {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
@@ -124,10 +135,11 @@ export default defineComponent({
 	.slide-fade-leave-active {
 		transition: all 0.8s ease;
 	}
-	.slide-fade-enter, .slide-fade-leave-to {
+	.slide-fade-enter,
+	.slide-fade-leave-to {
 		transform: translateY(-10px);
 		opacity: 0;
-		width: 70%;
+		// width: 70%;
 	}
 }
 

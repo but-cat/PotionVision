@@ -2,17 +2,16 @@ import { Applet, useRouter, useGet, get, usePost } from '../../../Session/utils/
 import Context, { Authority } from '../../../Session/utils/context/index';
 import packageConfig from '@root/package.json';
 import SettingRouter from './index';
-import Orbit from '../../../orbit';
+// import Orbit from '../../../orbit';
 import yaml from "js-yaml";
 
 import fs from 'node:fs/promises';
 import { join } from 'upath';
 
+import AppletPrototype from './prototype';
+
 // @useRouter
-export default class template extends Applet {
-	public get route() {
-		return super.router as unknown as SettingRouter;
-	}
+export default class template extends AppletPrototype {
 
 	/**
 	 * 创建笔记
@@ -23,7 +22,7 @@ export default class template extends Applet {
 	public async getTemplate() {
 		const { context, route } = this;
 		const { session, domain, scheme } = context;
-		const orbit = session.orbit as Orbit;
+		const orbit = session.Apps;
 		const { BrowserWindow } = orbit;
 
 		const options = await context.body.json();
@@ -50,7 +49,7 @@ export default class template extends Applet {
 	async getPageCenter() {
 		const { context, router } = this;
 		const { session, domain, scheme } = context;
-		const orbit = session.orbit as Orbit;
+		const orbit = session.Apps;
 		const { BrowserWindow } = orbit;
 
 		const options = await context.body.json();
@@ -94,7 +93,7 @@ export default class template extends Applet {
 	public async createFromConfig() {
 		const { context, route } = this;
 		const { session, domain, scheme } = context;
-		const orbit = session.orbit as Orbit;
+		const orbit = session.Apps;
 		const { BrowserWindow } = orbit;
 
 		const ymlText = await context.body.text();

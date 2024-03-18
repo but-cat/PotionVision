@@ -7,6 +7,7 @@ import upath from 'upath';
 import { join } from 'path';
 import History from './history';
 import Template from './template';
+import Root from './root';
 
 export default class Setting extends Prototype {
 
@@ -18,7 +19,7 @@ export default class Setting extends Prototype {
 	}
 
 	constructor(public readonly session: Session) {
-		super(session, [History, Template]);
+		super(session, [Root, History, Template]);
 	}
 }
 
