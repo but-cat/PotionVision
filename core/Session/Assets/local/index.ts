@@ -33,7 +33,7 @@ export default class AssetsLocal extends Handler {
 	async info() {
 		try {
 			const { context } = this;
-			const { session, domain, scheme, path: assetsPath } = context;
+			const { session, domain, scheme, path: assetsPath, host } = context;
 
 			const filePath = join(this.session.path, assetsPath);
 
@@ -76,8 +76,9 @@ export default class AssetsLocal extends Handler {
 				subNode: subNode,
 				originPath,
 
-				// url: `${url}/${item}`,
-				url: `assets://${'project'}.local${upath.join('/', assetsPath)}`,
+				
+				// url: `assets://${'project'}.local${upath.join('/', assetsPath)}`,
+				url: `assets://${host}${upath.join('/', assetsPath)}`,
 				domain,
 				scheme,
 
@@ -162,8 +163,8 @@ export default class AssetsLocal extends Handler {
 						subNode: [],
 						originPath,
 
-						// url: `${url}/${item}`,
-						url: `assets://${'project'}.local${upath.join('/', url.path, item)}`,
+						// url: `assets://${'project'}.local${upath.join('/', url.path, item)}`,
+						url: `assets://${host}${upath.join('/', url.path, item)}`,
 						domain,
 						scheme,
 

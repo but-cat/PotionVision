@@ -19,6 +19,7 @@ export default {
 		icons,
 		dev: true,
 		current: !true,
+		menu: true,
 	},
 	component,
 };
