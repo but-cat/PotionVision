@@ -1,5 +1,5 @@
 <template>
-	<div class="w-full h-full flex flex-col overflow-hidden">
+	<div class="w-full h-full flex flex-col overflow-hidden hidden">
 		<div class="w-full px-4 py-2 bg-white relative flex items-center shadow-sm">
 			<div class="w-48">
 				<button @click="back" class="w-10 h-10 text-xs leading-none rounded-full">
@@ -102,7 +102,7 @@
 
 		<!-- <iframe :src="contentUrl" frameborder="0" class="w-full h-full"></iframe> -->
 
-		<webview :src="contentUrl" ref="webview" class="w-full h-full"></webview>
+		<!-- <webview :src="contentUrl" ref="webview" class="w-full h-full"></webview> -->
 	</div>
 </template>
 

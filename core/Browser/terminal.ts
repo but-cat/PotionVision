@@ -13,11 +13,6 @@ const os = require('os');
 import type {IPty, IWindowsPtyForkOptions, spawn as npSpawn} from 'node-pty';
 import CorePage from './index';
 
-// const shell = os.platform() === 'win32' ? 'powershell.exe' : 'zsh';
-
-// const shell = CorePage.isMac ? 'zsh' : 'powershell.exe';
-
-// let spawn: typeof npSpawn;
 
 export default class TerminalSource extends EventEmitter {
 	public static get isMac() {

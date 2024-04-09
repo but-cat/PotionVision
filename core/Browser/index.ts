@@ -22,7 +22,7 @@ import Terminal from "./terminal";
 // import logo from '@root/public/logo.png?asset';
 import logo_ico from '@root/public/favicon.ico?asset';
 
-
+import PagePool from "./Page/index";
 
 interface dragOptions {
 	file: string;
@@ -38,6 +38,8 @@ interface dragOptions {
 export default class Project extends BrowserWindow {
 
 	public readonly uuid: string = createUUID();
+
+	public readonly PagePool = new PagePool(this);
 
 	public static get isMac() {
 		return process.platform === 'darwin';
@@ -251,6 +253,29 @@ export default class Project extends BrowserWindow {
 			}
 		});
 
+		webContents.on('destroyed', this.uninstall.bind(this));
+
+	}
+
+	/**
+	 * 创建页面
+	 * @param { String } url 链接 
+	 * @returns { String } 页面uuid 
+	 */
+	public setComponentsState( options) {
+		
+		this.PagePool.setPageState({
+			...options,
+			PagePool: this.PagePool,
+			orbit: this.orbit,
+		});
+	}
+
+	public setPageState(state: any) {
+		const viewUUID = this.setComponentsState({
+			...state,
+			window: this,
+		});
 	}
 
 
@@ -304,6 +329,9 @@ export default class Project extends BrowserWindow {
 		}
 	}
 	
+	uninstall() {
+		this.PagePool.uninstall();
+	}
 }
 
 type Filter = {

@@ -11,18 +11,23 @@
 				<div class="aspect-[1097/845] w-[68.5625rem] bg-gradient-to-tr from-[#ff4694] to-[#776fff] opacity-20" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
 			</div>
 			<div class="w-full h-full flex flex-col overflow-hidden relative">
-				<!-- <TabBars ref="tabBar" class="w-full h-10 absolute top-0 left-0 z-10"/> -->
 				<div class="w-full flex-1 overflow-hidden" style="--nav-bars-heigth: 2.5rem">
 					<router-view v-slot="{ Component }">
 						<Transition name="fade-transform" mode="out-in">
-							<!-- <KeepAlive> -->
-								<component :is="Component" />
-							<!-- </KeepAlive> -->
+							<component :is="Component" />
 						</Transition>
 					</router-view>
 				</div>
 
-				
+				<div v-show="isBrowserPage" :ishref="$route.path == '/browser'" :href="$route.path" class="w-full h-full flex flex-col text-gray-300 dark:text-gray-800 overflow-hidden absolute left-0 top-0 z-50">
+					<div class="flex-0 h-10 flex flex-col bg-white dark:bg-gray-900 dark:text-white text-gray-600">
+						<AppMenu/>
+						<!-- <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700" style="flex: 0 0 6px;border-bottom-width: 1px;"></div> -->
+					</div>
+					<div class="flex-1 w-full overflow-hidden">
+						<WebView></WebView>
+					</div>
+				</div>
 			</div>
 			
 			
@@ -35,11 +40,21 @@
 
 <script setup lang="ts">
 import { defineComponent, reactive, ref, computed, getCurrentInstance, onMounted } from 'vue';
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from 'vuex';
 
 import NavBar from '@/view/navBars/index.vue';
 import NewsBar from '@/view/newsBar/index.vue';
 import TabBars from '@/view/tabBars/index.vue';
+
+import WebView from '@/view/Webview/index.vue';
+import AppMenu from '@/view/Webview/tabBars/index.vue';
+
+
+
+
+const router = useRouter();
+const route = useRoute();
 
 const store = useStore();
 
@@ -47,6 +62,8 @@ const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties;
 
 const active = computed(() => store.state.page.activeTab);
+
+const isBrowserPage = computed(() => route.path == '/browser');
 
 const tabBar = ref<typeof TabBars>();
 
