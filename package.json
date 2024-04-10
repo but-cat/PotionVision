@@ -1,7 +1,7 @@
 {
 	"name": "PotionVision",
-	"version": "1.0.0",
-	"description": "An Electron application with Vue and TypeScript",
+	"version": "0.1.0",
+	"description": "播放器应用,简化追番的日常操作",
 	"main": "./out/main/index.js",
 	"author": "example.com",
 	"homepage": "https://www.electronjs.org",
