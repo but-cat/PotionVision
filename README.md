@@ -4,13 +4,17 @@
 使用 vue, electron, tailwindcss, vite, typescript, 以及其他一些库构建的视频播放器应用
 
 
+## 下载
+
+[前期预览版 v0.1.0](https://github.com/but-cat/PotionVision/releases/tag/v0.1.0)
+
 
 
 ## 目标
 
-- [*] 通过 aria2 下载视频
+- [x] 通过 aria2 下载视频
 
-- [*] 通过 NPlayer 播放视频与弹幕
+- [x] 通过 NPlayer 播放视频与弹幕
 
 - [ ] 集成 ffmpeg 实现实时转码
 
@@ -18,9 +22,9 @@
 
 - [ ] 开发定时任务功能
 
-- [*] 开发文件浏览器
+- [ ] 开发文件浏览器
 
-- [ ] 开发内置浏览器
+- [x] 开发内置浏览器
 
 - [ ] 开发移动端网页播放器功能
 
