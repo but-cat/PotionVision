@@ -1,7 +1,7 @@
 <template>
 	<Teleport to="#modal">
-		<div @blur="closeMenu" @click="closeMenu" class="w-full h-full flex justify-end fixed left-0 top-0">
-			<div @click.stop class="omnibox w-80 mt-24 mr-6 rounded-lg text-slate-700 dark:text-slate-500 bg-white dark:bg-gray-900 text-1 leading-5 shadow-lg border border-slate-400/20 shadow-black/5 ring-slate-700/10 self-start">
+		<div @blur="closeMenu" @click="closeMenu" class="w-full h-full flex justify-end fixed left-0 top-0 z-50">
+			<div @click.stop class="omnibox w-80 mt-20 mr-6 rounded-lg text-slate-700 dark:text-slate-500 bg-white dark:bg-gray-900 text-1 leading-5 shadow-lg border border-slate-400/20 shadow-black/5 ring-slate-700/10 self-start">
 				<PageOptions @close="closeMenu" :page="page"/>
 				<OpenList @close="closeMenu" :page="page"/>
 			</div>

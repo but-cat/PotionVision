@@ -5099,7 +5099,7 @@ supports-preserve-symlinks-flag@^1.0.0:
 
 svg-inject@^0.1.0:
   version "0.1.0"
-  resolved "https://registry.yarnpkg.com/svg-inject/-/svg-inject-0.1.0.tgz#464168494e5fa469e79bebcc9c7dab5d1e95964d"
+  resolved "https://registry.npmmirror.com/svg-inject/-/svg-inject-0.1.0.tgz#464168494e5fa469e79bebcc9c7dab5d1e95964d"
   integrity sha512-ahKW5g8H4kCejwTUHMvylT8Oq1rj76PHVsgkcCckT2Nx150qNwsNyjWVupDZwiRRnUQzv/l7koMQ3IHZAvZYpQ==
   dependencies:
     sliced "0.0.5"

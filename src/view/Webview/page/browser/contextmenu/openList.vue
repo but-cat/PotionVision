@@ -12,18 +12,9 @@
 			收藏该页面
 		</div>
 
-		<div v-if="isHttpLink" @click="generateArticles" class="flex items-center rounded-md p-1 hover:bg-primary-400/20 hover:text-white cursor-pointer">
-			<img src="~@icon/book_letter.svg" key="back" onload="SVGInject(this)" class="mr-2 h-5 w-5 flex-none text-slate-400" />
-			创建笔记
-		</div>
-
 		<div v-if="isHttpLink" @click="openLink" class="flex items-center rounded-md p-1 hover:bg-primary-400/20 hover:text-white cursor-pointer">
 			<img src="~@icon/globe_search.svg" key="back" onload="SVGInject(this)" class="mr-2 h-5 w-5 flex-none text-slate-400" />
 			使用默认浏览器打开
-		</div>
-		<div v-else-if="isToolsLink" @click="openLink" class="flex items-center rounded-md p-1 hover:bg-primary-400/20 hover:text-white cursor-pointer">
-			<img src="~@icon/desktop.svg" key="back" onload="SVGInject(this)" class="mr-2 h-5 w-5 flex-none text-slate-400" />
-			使用桌面程序打开
 		</div>
 		
 	</div>

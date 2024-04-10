@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import router from './router';
 import store from './store';
 
+import "@iconfu/svg-inject";
 
 import '@/style/index.less';
 import '@/style/tailwind.css';
