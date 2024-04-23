@@ -1,6 +1,8 @@
 import { FileBucket, FileItem, Folde } from "./bucket";
 
 export default interface FileState {
+	baseUrl: string;
+	
 	routePath: string;
 	bucket: FileBucket;
 	activeFolder?: Folde;

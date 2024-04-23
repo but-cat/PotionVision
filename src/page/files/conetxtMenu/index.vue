@@ -9,7 +9,7 @@
 				<span class="file-name ml-2 flex-1">{{ item.name }}</span>
 			</div>
 
-			<ToolsList v-if="item.isFile" @close="emit('close')" :item="item" />
+			<!-- <ToolsList v-if="item.isFile" @close="emit('close')" :item="item" /> -->
 			
 			<FileMenu v-if="item.isFile" @close="emit('close')" :path="path" :root="root" :item="item"/>
 			<FolderMenu v-else-if="item.isFolder" @close="emit('close')" :path="path" :root="root" :item="item"/>

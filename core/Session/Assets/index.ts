@@ -27,7 +27,7 @@ import Prototype from '../../Session/utils/prototype';
 // import Context from "./context/index";
 import Context, {  } from "../../Session/utils/context/index";
 
-
+import ApiApplet from "./api/index";
 
 import AssetsLocal from "./local/index";
 
@@ -41,6 +41,9 @@ export default class Assets extends Prototype {
 
 
 	// public readonly ftp: ClientSet;
+
+
+	public readonly api: ApiApplet;
 
 
 	static readonly privileges: Privileges = {
@@ -71,7 +74,9 @@ export default class Assets extends Prototype {
 
 	constructor(public readonly session: Session) {
 		super(session, [
-			AssetsLocal,
+			[AssetsLocal.name, AssetsLocal],
+
+
 			// AssetsFtp,
 		]);
 
@@ -81,6 +86,8 @@ export default class Assets extends Prototype {
 
 
 		// this.ftp = new ClientSet(session);
+
+		this.api = new ApiApplet(session, this);
 
 		
 
@@ -122,6 +129,9 @@ export default class Assets extends Prototype {
 					return this.dispatch(context);
 				case 'remote':
 					return this.remote(context);
+
+				case 'api':
+					return this.api.dispatch(context);
 				default:
 					return new Response('', {
 						headers: { 'content-type': 'text/html' },

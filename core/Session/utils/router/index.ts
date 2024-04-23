@@ -41,14 +41,29 @@ export class Router extends Map<string | RegExp, typeof Applet | typeof Handler>
 
 
 
-	RegExpList: RegExp[] = [];
-	
-	constructor(readonly AppletList = [] as Array<typeof Applet | typeof Handler>) {
+	// RegExpList: RegExp[] = [];
 
-		const appletList = AppletList.map((route) => [route.name, route] as [string | RegExp, typeof Applet]);
+
+	get RegExpList(): RegExp[] {
+		const AppletList = [...this.values()]
+		return AppletList.filter((route) => typeof route.name !== 'string').map(i=> i.name as unknown as RegExp) as RegExp[];
+	}
+	
+	constructor(readonly AppletList = [] as Array<typeof Applet | typeof Handler | [string | RegExp, typeof Applet] | [string | RegExp, typeof Handler]>) {
+
+		const appletList = AppletList.map((route) => {
+			if(route instanceof Array) return [route[0], route[1]] as [string | RegExp, typeof Applet];
+			else return [route.name, route] as [string | RegExp, typeof Applet]
+		});
 		super(appletList as [string | RegExp, typeof Applet | typeof Handler][]);
 
-		this.RegExpList = AppletList.filter((route) => typeof route.name !== 'string').map(i=>i.name as unknown as RegExp) as RegExp[];
+		// this.RegExpList = AppletList.filter((route) => {
+		// 	if(route instanceof Array) return typeof route[0] !== 'string';
+		// 	else return typeof route.name !== 'string'
+		// }).map(i=> {
+		// 	if(i instanceof Array) return i[0] as unknown as RegExp;
+		// 	else return i.name as unknown as RegExp;
+		// }) as RegExp[];
 
 		// this.route.useConfig(routeDevInterface(this));
 	}
@@ -69,10 +84,24 @@ export class Router extends Map<string | RegExp, typeof Applet | typeof Handler>
 
 		
 		const handle = this.RegExpList.find((reg) => reg.test(ctx.url as unknown as string));
-		if(handle) handleBlock: {
-			const handler = this.get(handle) as typeof Handler | undefined;
+		// console.log(this.RegExpList.map(i=> i.toString()), handle);
+		console.log(this.entries());
+
+
+		const handler = [...this.entries()].filter(([key]) => typeof key !== 'string')
+		.filter(([key]) => typeof key !== 'string').find((_args) => {
+			const [key, value] = _args;
+			if(typeof key == 'string') return false;
+			return key.test(ctx.url as unknown as string);
+		})?.[1] as typeof Handler | undefined;
+		
+		if(handler) handleBlock: {
+			
+			
+			// const handler = this.get(handle) as typeof Handler | undefined;
+			console.log('handle', handler);
 			if(!handler) break handleBlock;
-			const route = new handler(ctx, this);
+			const route = new handler(ctx, this) as Handler;
 			return route.dispatch();
 		}
 

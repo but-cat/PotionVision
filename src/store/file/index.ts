@@ -8,6 +8,7 @@ import AppReady from "@/utils/appReady";
 
 
 const state = {
+	baseUrl: 'assets://project.local/',
 	routePath: '',
 	bucket: new FileBucket(),
 	activeFolder: undefined,
@@ -20,6 +21,12 @@ const state = {
 
 
 const mutations: MutationTree<FileState> = {
+
+	setBaseUrl(state, url: string) {
+		state.baseUrl = url;
+	},
+
+
 	addFile(state, file: File, path?: string) {
 		console.log('file: ', file);
 		

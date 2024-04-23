@@ -43,10 +43,10 @@ export default class Prototype extends Router {
 		return upath.join(projectPath);
 	}
 
-	constructor(public readonly session: Session, appletList?: Array<typeof Applet | typeof Handler>) {
+	constructor(public readonly session: Session, appletList?: Array<typeof Applet | typeof Handler | [string | RegExp, typeof Applet] | [string | RegExp, typeof Handler]>) {
 		super(appletList);
 
-		this.app = session.orbit;
+		this.app = session.Apps!;
 
 		this.fetch = new Fetch(session);
 

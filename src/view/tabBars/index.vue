@@ -1,5 +1,5 @@
 <template>
-	<div class="tab-bars bg-gray-50/60 dark:bg-gray-900/20 w-16 flex flex-shrink-0 flex-col z-50 backdrop-blur-sm">
+	<div class="tab-bars bg-gray-50 dark:bg-gray-900/20 w-16 flex flex-shrink-0 flex-col z-50 backdrop-blur-sm">
 		
 
 		<TabList v-bind="$attrs" @active="setActiveItem" @close="closeItem" />

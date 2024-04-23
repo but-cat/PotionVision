@@ -54,6 +54,7 @@
 <script setup lang="ts">
 import { defineComponent, reactive, ref, toRaw, computed, watch, onMounted, markRaw, nextTick } from 'vue';
 import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
+import { useStore } from "vuex";
 
 
 
@@ -69,11 +70,24 @@ const BASE_URL = computed(() => (window as any).BASE_URL ?? '暂无工作路径'
 
 const router = useRouter();
 const route = useRoute();
+const store = useStore();
 
 const activePath = ref<string>(''); // 显示的目录
 const rootPath = ref<string>('');
 const fileList = ref<FileItem[]>([]);
 const viewType = ref<string>('icon');
+
+
+
+watch(() => store.state.file.baseUrl, (data) => {
+	// console.log('store', data);
+	const BASE_URL = data+'/';
+	const authority = new Authority(BASE_URL);
+	rootPath.value = `${authority.scheme}://${authority.host}`;
+	activePath.value = authority.path;
+	getDirInfo();
+});
+
 
 async function getDirInfo() {
 	fileList.value = [];
@@ -117,11 +131,12 @@ watch(activePath, () => {
 });
 
 onMounted(() => {
-	const BASE_URL = 'assets://project.local/'
+	const BASE_URL = store.state.file.baseUrl;
 	const authority = new Authority(BASE_URL);
 	rootPath.value = `${authority.scheme}://${authority.host}`;
 	activePath.value = authority.path;
 	// getDirInfo();
+	getDirInfo();
 });
 </script>
 

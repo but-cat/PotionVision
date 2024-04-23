@@ -1,7 +1,7 @@
 <template>
 	<div @open-video="openVideo" class="w-full h-full bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 flex overflow-hidden text-sm">
 
-		<NavBar @open-menu=""/>
+		<NavBar @open-menu="openMenu"/>
 
 		<NewsBar />
 
@@ -20,7 +20,7 @@
 				</div>
 
 				<div v-show="isBrowserPage" :ishref="$route.path == '/browser'" :href="$route.path" class="w-full h-full flex flex-col text-gray-300 dark:text-gray-800 overflow-hidden absolute left-0 top-0 z-50">
-					<div class="flex-0 h-10 flex flex-col bg-white dark:bg-gray-900 dark:text-white text-gray-600">
+					<div class="flex-0 h-10 flex flex-col bg-gray-200 dark:bg-gray-900 dark:text-white text-gray-600">
 						<AppMenu/>
 						<!-- <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700" style="flex: 0 0 6px;border-bottom-width: 1px;"></div> -->
 					</div>
@@ -32,10 +32,14 @@
 			
 			
 		</div>
+
+		<FileConetxtMenu v-if="position.open" :left="position.left" :top="position.top" @close="position.open = false"/>
 	</div>
 
+	
+
 	<!-- <FileModal /> -->
-	<div id="modal"></div>
+	<!-- <div id="modal"></div> -->
 </template>
 
 <script setup lang="ts">
@@ -51,7 +55,7 @@ import WebView from '@/view/Webview/index.vue';
 import AppMenu from '@/view/Webview/tabBars/index.vue';
 
 
-
+import FileConetxtMenu from "@/view/fileConetxtMenu/index.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -67,6 +71,9 @@ const isBrowserPage = computed(() => route.path == '/browser');
 
 const tabBar = ref<typeof TabBars>();
 
+
+const position = ref<{ left: number; top: number, open: boolean }>({ left: 0, top: 0, open: false });
+
 function openVideo(event: CustomEvent) {
 	const { url } = event.detail as {
 		url: string;
@@ -74,6 +81,16 @@ function openVideo(event: CustomEvent) {
 
 	tabBar.value!.addItem(url);
 }
+
+
+function openMenu(event: MouseEvent) {
+	position.value = {
+		left: event.clientX,
+		top: event.clientY,
+		open: true,
+	};
+}
+
 
 (window as any).addEventListener('open-video', openVideo);
 

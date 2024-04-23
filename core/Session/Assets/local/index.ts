@@ -17,14 +17,23 @@ import { createResponse } from "./range";
 
 // @useRouter
 export default class AssetsLocal extends Handler {
-	static name = /^assets:\/\/([0-9a-z]+).local/;
+	// static name = /^assets:\/\/([0-9a-z]+).local/;
+
+	static name = /^assets:\/\/project.local/;
+
+	static baseUrl = 'assets://project.local';
+
+
+	readonly basePath = this.session.path;
+
+	
 
 	async get() {
 		const { url, domain, authority, scheme, host, port, path: assetsPath } = this.context;
-		console.log('Assets - handler', 'constructor', join(this.session.path, assetsPath), assetsPath);
+		console.log('Assets - handler', 'constructor', join(this.basePath, assetsPath), assetsPath);
 		// if(host !== 'local') throw new Error('host !== local');
 
-		const path = upath.join(this.session.path, assetsPath);
+		const path = upath.join(this.basePath, assetsPath);
 		const res = await createResponse(this.context.request, path);
 
 		return res
@@ -35,13 +44,13 @@ export default class AssetsLocal extends Handler {
 			const { context } = this;
 			const { session, domain, scheme, path: assetsPath, host } = context;
 
-			const filePath = join(this.session.path, assetsPath);
+			const filePath = join(this.basePath, assetsPath);
 
 			// console.log('Assets', 'constructor', filePath, assetsPath);
 
 			const fileStat = await fs.stat(filePath);
 
-			const subNode = (await fs.stat(filePath)).isDirectory() ? ((await fs.readdir(filePath)) as string[]) : [];
+			// const subNode = (await fs.stat(filePath)).isDirectory() ? ((await fs.readdir(filePath)) as string[]) : [];
 
 			let mimeValue = '';
 			const [_extension, extension] = upath.basename(filePath).match(/\.([0-9a-z]+)(?:[\?#]|$)/i) ?? [];
@@ -72,8 +81,11 @@ export default class AssetsLocal extends Handler {
 
 				mime: mimeValue,
 
-				isSubNode: subNode.length > 0,
-				subNode: subNode,
+				// isSubNode: subNode.length > 0,
+				// subNode: subNode,
+
+				isSubNode: true,
+				subNode: [],
 				originPath,
 
 				
@@ -105,7 +117,7 @@ export default class AssetsLocal extends Handler {
 		try {
 			const { url, domain, authority, scheme, host, port, path: assetsPath } = this.context;
 
-			const folderPath = upath.join(this.session.path, assetsPath);
+			const folderPath = upath.join(this.basePath, assetsPath);
 			// console.log('Assets', 'constructor', folderPath, assetsPath);
 
 			const files = (await fs.readdir(folderPath)) as string[];
@@ -173,7 +185,7 @@ export default class AssetsLocal extends Handler {
 				});
 
 			const resBody = {
-				projectPath: this.session.path,
+				projectPath: this.basePath,
 				assetsPath,
 				name: authority.name,
 				files,
@@ -212,7 +224,7 @@ export default class AssetsLocal extends Handler {
 		try {
 			const { context } = this;
 			const { session, domain, scheme, path: assetsPath, request } = context;
-			const filePath = join(this.session.path, assetsPath);
+			const filePath = join(this.basePath, assetsPath);
 
 			const fileStat = await fs.stat(filePath);
 			if (!fileStat.isFile()) throw new Error('is not file');
@@ -274,7 +286,7 @@ export default class AssetsLocal extends Handler {
 		try {
 			const { context } = this;
 			const { session, domain, scheme, path: assetsPath } = context;
-			const filePath = join(this.session.path, assetsPath);
+			const filePath = join(this.basePath, assetsPath);
 
 			await fs.unlink(filePath);
 		} catch (error: any) {
