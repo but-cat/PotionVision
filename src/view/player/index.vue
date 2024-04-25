@@ -42,7 +42,8 @@ const danmakus = new Danmaku({
 	autoInsert: false,
 	// items: [{ time: 1, text: '弹幕～' }],
 	opacity: 0.8,
-	items: []
+	items: [],
+	duration: 7,
 });
 const player = new NPlayer({
 	// src: url.value,

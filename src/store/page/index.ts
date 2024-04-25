@@ -78,11 +78,15 @@ const mutations: MutationTree<PageState> = {
 	},
 
 	delWebView(state, uuid: string) {
-		
+
+		const remote = require('@electron/remote');
+		const win: any = remote.getCurrentWindow() as any;
+
 		const page = state.tabSet.get(uuid);
 		page?.close();
 		state.tabSet.delete(uuid);
 		const index = state.tabList.indexOf(uuid);
+		win.closeWebViewPage(page?.uuid);
 		
 		const activeIndex = index < state.tabList.length - 1 ? index : state.tabList.length - 2;
 		// const activeUUID = state.tabList[activeIndex];

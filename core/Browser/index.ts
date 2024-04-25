@@ -270,6 +270,13 @@ export default class Project extends BrowserWindow {
 			orbit: this.orbit,
 		});
 	}
+	/**
+	 * 关闭页面
+	 * @param { String } uuid 页面uuid 
+	 */
+	public closeWebViewPage( uuid: string ) {
+		this.PagePool.delete(uuid);
+	}
 
 	public setPageState(state: any) {
 		const viewUUID = this.setComponentsState({
