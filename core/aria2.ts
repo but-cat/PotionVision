@@ -103,7 +103,8 @@ export default class Asia2 extends Aria2Client {
 	}
 
 	addUri(uri: string, dir: string = ''): Promise<any> {
-		return super.call('addUri', [uri], { dir: upath.join(this.videoPath, dir) });
+		// return super.call('addUri', [uri], { dir: upath.join(this.videoPath, dir) });
+		return super.call('addUri', [uri], { dir });
 	}
 
 

@@ -147,6 +147,17 @@ watch(url, () => {
 	player.currentTime = time.value;
 
 	danmakuParse();
+
+	player.video.querySelectorAll('track').forEach((el: any) => el.remove());
+
+	const traceUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.vtt');
+	const traceEl = document.createElement('track');
+	traceEl.setAttribute("label", "简体中文");
+	traceEl.setAttribute("kind", "subtitles");
+	traceEl.setAttribute("srclang", "ch");
+	traceEl.setAttribute("src", traceUrl);
+
+	player.video.appendChild(traceEl);
 }, { immediate: true });
 
 onMounted(async () => {
@@ -160,14 +171,14 @@ onMounted(async () => {
 	player.mount(nplayer.value);
 	
 
-	const traceUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.vtt');
-	const traceEl = document.createElement('track');
-	traceEl.setAttribute("label", "简体中文");
-	traceEl.setAttribute("kind", "subtitles");
-	traceEl.setAttribute("srclang", "ch");
-	traceEl.setAttribute("src", traceUrl);
+	// const traceUrl = danmaku.value ? danmaku.value : url.value.replace(/\.\w+$/, '.vtt');
+	// const traceEl = document.createElement('track');
+	// traceEl.setAttribute("label", "简体中文");
+	// traceEl.setAttribute("kind", "subtitles");
+	// traceEl.setAttribute("srclang", "ch");
+	// traceEl.setAttribute("src", traceUrl);
 
-	player.video.appendChild(traceEl);
+	// player.video.appendChild(traceEl);
 	player.video.textTracks[0].mode = "showing"
 });
 

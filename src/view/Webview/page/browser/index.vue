@@ -55,7 +55,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted, getCurrentInstance, toRefs, watch } from 'vue';
 // import { Feed, FeedItem } from "../interface/feed.d";
-import WebView from "@/store/page/webView";
+import { CoreView, WebView } from "@/store/page/webView";
 import Omnibox from "./omnibox.vue";
 
 import BrowserMenu from "./contextmenu/index.vue";

@@ -339,6 +339,22 @@ export default class Project extends BrowserWindow {
 	uninstall() {
 		this.PagePool.uninstall();
 	}
+
+
+
+
+
+	/**
+	 * 选择文件夹
+	 * @returns { String } 选择的文件夹路径
+	 */
+	public async getDir() {
+		const projectDirectory = await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory', 'promptToCreate', 'dontAddToRecent'] });
+		if (projectDirectory.canceled) return;
+		const path = projectDirectory.filePaths[0];
+
+		return path;
+	}
 }
 
 type Filter = {

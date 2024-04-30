@@ -15,6 +15,12 @@
 
 								<textarea v-model="url" type="text" autocomplete="address-level1" class="w-full h-36 px-3 py-2 flex items-center justify-between rounded-md bg-white dark:bg-slate-800 border border-slate-400/20  shadow-sm focus:outline outline-2 outline-primary-300/80" ></textarea>
 							</div>
+
+							<p class="mt-2 text-sm text-gray-500">下载目录：</p>
+							<div class="w-full">
+								<input @click="getDir" v-model="targetDir" type="text" autocomplete="address-level1" class="w-full h-9 px-3 py-2 flex items-center justify-between rounded-md bg-white dark:bg-slate-800 border border-slate-400/20  shadow-sm focus:outline outline-2 outline-primary-300/80">
+								<!-- <input @change="" type="file" class="hidden" webkitdirectory ref="fileInput"> -->
+							</div>
 						</div>
 					</div>
 					<div class="px-4 py-3 flex flex-row-reverse px-6">
@@ -40,6 +46,8 @@ const props = defineProps({
 
 
 const url = ref<string>('');
+const targetDir = ref<string>('');
+const fileInput = ref<HTMLInputElement>();
 
 const open = computed({
 	get() {
@@ -51,6 +59,17 @@ const open = computed({
 	},
 });
 
+
+async function getDir() {
+	const remote = require('@electron/remote');
+	// const win: any = remote.getCurrentWindow() as any;
+	const { dialog } = remote;
+	const projectDirectory = await dialog.showOpenDialog({ properties: ['openDirectory', 'createDirectory', 'promptToCreate', 'dontAddToRecent'] });
+	if (projectDirectory.canceled) return;
+	const path = projectDirectory.filePaths[0];
+	targetDir.value = path;
+}
+
 async function addUrl() {
 	try {
 		await fetch('apps://download.api/progress/addUrl', {
@@ -61,7 +80,7 @@ async function addUrl() {
 			},
 			body: JSON.stringify({
 				url: url.value,
-				dir: '',
+				dir: targetDir.value,
 			}),
 		});
 
@@ -71,4 +90,12 @@ async function addUrl() {
 		
 	}
 }
+
+
+onMounted(async () => {
+	// console.log('mounted');
+	const remote = require('@electron/remote');
+	const win: any = remote.getCurrentWindow() as any;
+	targetDir.value = win.session.path;
+});
 </script>

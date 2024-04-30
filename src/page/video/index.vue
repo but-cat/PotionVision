@@ -4,7 +4,7 @@
 			<NPlayer v-if="videoOptions.url" :url="videoOptions.url" :time="videoOptions.time" :danmaku="videoOptions.danmaku" />
 			<!-- <video :src="options.url" class="w-full h-full" controls></video> -->
 
-			<oSashY v-model="height" :min="350" :max="650" class="absolute right-0 left-0 bottom-1 m-auto z-10" style="z-index: 1000;"/>
+			<oSashY v-model="height" :min="minHeight" :max="maxHeight" class="absolute right-0 left-0 bottom-1 m-auto z-10" style="z-index: 1000;"/>
 		</div>
 
 		<Episode v-if="options.episode" @url="data => videoOptions.url = data" @time="data => videoOptions.time = data"/>
@@ -25,6 +25,9 @@ const router = useRouter();
 const route = useRoute();
 
 const height = ref(650);
+const minHeight = ref(350);
+const maxHeight = ref(650);
+// const height = ref(350);
 const heightData = computed(() => `${height.value}px`);
 
 const videoNumber = ref(1);
@@ -46,7 +49,15 @@ const options = reactive({
 });
 
 
+function resetHeightRange() {
+	minHeight.value = Math.floor(window.innerHeight / 5);
+	maxHeight.value = window.innerHeight - 350;
+	height.value = Math.max(minHeight.value, Math.min(maxHeight.value, height.value));
 
+	console.log('resize', minHeight.value, maxHeight.value);
+}
+
+window.addEventListener('resize', resetHeightRange);
 
 onMounted(() => {
 
@@ -71,5 +82,6 @@ onMounted(() => {
 	// 		options.url = history.url;
 	// 	}
 	// }
+	resetHeightRange();
 });
 </script>

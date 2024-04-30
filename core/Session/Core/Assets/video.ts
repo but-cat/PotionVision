@@ -27,7 +27,7 @@ export default class ftp extends Applet {
 
 
 	/**
-	 * 退出登录
+	 * 提取视频字幕
 	 * @returns 
 	 */
 	@usePost
