@@ -2,7 +2,7 @@
 	<div class="flex-1 flex flex-col items-center border-t border-gray-200 dark:border-gray-900 bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md overflow-hidden">
 		<div class="w-full h-6 flex-0 p-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-900">
 			<div>
-				<p @click="focusItem" class="text-sm text-gray-700 dark:text-gray-300">{{ fileName }}</p>
+				<p @click="focusItem" class="text-sm text-gray-700 dark:text-gray-300">{{ dirName }}/{{ fileName }}</p>
 			</div>
 			<div>
 				{{ accessTime }}
@@ -116,6 +116,14 @@ const accessTime = computed(() => {
 });
 
 const fileName = computed(() => url.value.replace(/(.*\/)*([^.]+).*/gi, '$2'));
+
+const dirName = computed(() => {
+	let assetsPath = url.value.replace(/(\w+):\/\/([^/:]+)(:\d*)?/, '').replace(/\/[^\/]+$/, "");
+	const dirName = assetsPath.replace(/(.*\/)*([^.]+).*/ig, "$2");
+	return dirName;
+});
+
+
 
 async function getEpisodeInfo() {
 	const dirUrl = options.url.replace(/\/[^\/]+$/, '/');

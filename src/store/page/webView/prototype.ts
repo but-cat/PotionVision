@@ -354,6 +354,10 @@ export default abstract class WebView extends HTMLElement {
 	 * @returns {void}
 	 */
 	public close() {
+
+		this.#webview?.executeJavaScript('window.dispatchEvent(new Event("beforeunload"));')
+
+
 		this.closeDevTools();
 		this.#webview?.remove();
 		this.remove();

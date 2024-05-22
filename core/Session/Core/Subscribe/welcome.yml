@@ -1,0 +1,33 @@
+# 欢迎来到 yarm form 表单编辑器
+
+yarm form[title]: > 
+    这是基于 yarm 文件配置生成表单模版的编辑器
+
+    在这里内置了一些基础的表单组件,您可以书写简单的配置来生成表单模版
+    
+    可被用于简单的配置场合,收集并生成json数据
+	
+texts[text]=666: 输入框，最基本也是默认的文本类型输入组件
+
+colors[color]: color 颜色选择组件，可在sRGB色彩空间中选择一个十六进制颜色
+
+textarea[textarea]: 文本域，同样也是文本输入组件，但是被用于处理多行文本
+
+number[number]: number 数字输入框，用于输入数值
+
+range[range]: number 滑块组件，用于模糊选择一个数值区间
+
+switch[switch]: switch 开关组件，用于表示开启或关闭的状态
+
+color[color]=0xdddddd: > 
+    color 颜色选择组件，可在sRGB色彩空间中选择一个颜色,并以十六进制css Color类型作为结果返回
+
+    请注意，当你需要设置默认值时，您需要使用十六进制数字来表示，即：#39C5BB 改写为 0x39c5bb
+
+
+
+
+background[image]: 输入图片
+
+
+radios[radio]: 单选框组件，用于选择一个选项  

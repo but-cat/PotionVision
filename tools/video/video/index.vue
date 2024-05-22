@@ -1,0 +1,70 @@
+<template>
+	<div class="video w-full h-full flex flex-col overflow-hidden">
+		<div :style="{ flex: `0 0 ${heightData}`, height: heightData }" class="relative bg-gray-50 bg-gray-800">
+			<NPlayer v-if="videoOptions.url" :url="videoOptions.url" :time="videoOptions.time" :danmaku="videoOptions.danmaku" />
+			<!-- <video :src="options.url" class="w-full h-full" controls></video> -->
+
+			<oSashY v-model="height" :min="minHeight" :max="maxHeight" class="absolute right-0 left-0 bottom-1 m-auto z-10" style="z-index: 1000;"/>
+		</div>
+
+		<Episode v-if="options.episode" @url="data => videoOptions.url = data" @time="data => videoOptions.time = data"/>
+		<Videos v-else v-model="videoOptions.url" @time="data => videoOptions.time = data"/>
+
+	</div>
+</template>
+
+<script setup lang="ts">
+import { defineComponent, reactive, ref, computed, watch, getCurrentInstance, onMounted, IframeHTMLAttributes } from 'vue';
+import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
+
+import Episode from "./episode.vue";
+import Videos from "./video.vue";
+
+
+const router = useRouter();
+const route = useRoute();
+
+const height = ref(650);
+const minHeight = ref(350);
+const maxHeight = ref(650);
+// const height = ref(350);
+const heightData = computed(() => `${height.value}px`);
+
+const videoNumber = ref(1);
+
+
+
+
+const videoOptions = reactive({
+	url: ``,
+	time: 0,
+	danmaku: ``,
+});
+
+const options = reactive({
+	url: ``,
+	time: 0,
+	// danmaku: ``,
+	episode: false
+});
+
+
+function resetHeightRange() {
+	minHeight.value = Math.floor(window.innerHeight / 5);
+	maxHeight.value = window.innerHeight - 350;
+	height.value = Math.max(minHeight.value, Math.min(maxHeight.value, height.value));
+
+	console.log('resize', minHeight.value, maxHeight.value);
+}
+
+window.addEventListener('resize', resetHeightRange);
+
+onMounted(() => {
+
+	const search_data = new URLSearchParams(location.search);
+	options.url = search_data.get('url') ?? '';
+	options.time = Number(search_data.get('time') ?? 0);
+
+	resetHeightRange();
+});
+</script>

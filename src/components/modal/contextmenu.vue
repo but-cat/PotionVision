@@ -1,6 +1,6 @@
 <template>
 	<Teleport to="#modal">
-		<div @blur="closeMenu" @click="closeMenu" @contextmenu="closeMenu" class="w-full h-full top-0 left-0 fixed z-10">
+		<div @blur="closeMenu" @click="closeMenu" @contextmenu="closeMenu" class="w-full h-full top-0 left-0 fixed z-50">
 			<div @click.stop :style="{ left: left + 'px', top: top + 'px' }" ref="menuElement" class="menu-element absolute rounded-lg shadow-lg ">
 				<object ref="objectEl" class="object absolute left-0 top-0 w-full h-full" type="text/html" data="about:blank" />
 				<slot/>

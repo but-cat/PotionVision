@@ -3,9 +3,9 @@
 		<!-- <Filelist /> -->
 
 		<div class="flex-1 h-full relative  text-gray-300 dark:text-gray-800 overflow-hidden">
-			<GalleryView v-if="viewType == 'gallery'" v-model:path="activePath" :fileList="fileList" />
-			<ListView v-else-if="viewType == 'list'" v-model:path="activePath" :fileList="fileList" />
-			<IconView v-else-if="viewType == 'icon'" v-model:path="activePath" :fileList="fileList" />
+			<GalleryView v-if="viewType == 'gallery'" v-model:path="activePath" :fileList="fileList" :foceItem="foceItem" />
+			<ListView v-else-if="viewType == 'list'" v-model:path="activePath" :fileList="fileList" :foceItem="foceItem"/>
+			<IconView v-else-if="viewType == 'icon'" v-model:path="activePath" :fileList="fileList" :foceItem="foceItem" />
 		</div>
 
 		<div class="w-full h-10 px-4 absolute left-0 bottom-0 flex flex-row items-center bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-600">
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, reactive, ref, toRaw, computed, watch, onMounted, markRaw, nextTick } from 'vue';
+import { defineComponent, reactive, ref, toRaw, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
 import { useStore } from "vuex";
 
@@ -75,7 +75,9 @@ const store = useStore();
 const activePath = ref<string>(''); // 显示的目录
 const rootPath = ref<string>('');
 const fileList = ref<FileItem[]>([]);
+const foceItem = ref<FileItem | null>(null);
 const viewType = ref<string>('icon');
+
 
 
 
@@ -122,21 +124,47 @@ async function getDirInfo() {
 	
 }
 
+async function getFolderInfo() {
+	try {
+		const res = await fetch(`${rootPath.value}/${activePath.value}`, {
+			method: 'INFO',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		// await wait();
+		const current = await res.json();
+		foceItem.value = new FileItem(current);
+		console.log(foceItem.value);
+		
+	} catch (error) {}
+}
+
 function parent() {
 	activePath.value = activePath.value.replace(/\/[^\/]+$/, '');
 }
 
-watch(activePath, () => {
+function updateFloder() {
+	getFolderInfo();
 	getDirInfo();
-});
+}
+
+watch(activePath, updateFloder);
 
 onMounted(() => {
 	const BASE_URL = store.state.file.baseUrl;
 	const authority = new Authority(BASE_URL);
 	rootPath.value = `${authority.scheme}://${authority.host}`;
 	activePath.value = authority.path;
-	// getDirInfo();
-	getDirInfo();
+});
+
+
+onMounted(async () => {
+	window.addEventListener('file-update', updateFloder);
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener('file-update', updateFloder);
 });
 </script>
 

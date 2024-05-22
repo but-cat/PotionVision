@@ -1,8 +1,10 @@
 import CoreView from './core';
+import ToolsView from './tools';
 import WebView from './web';
 
-// type PageView = CoreView | WebView;
+export type PageView = CoreView | ToolsView | WebView;
 
-export { CoreView, WebView };
+export { CoreView, ToolsView, WebView };
+
 
 

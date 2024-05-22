@@ -10,8 +10,6 @@ import fs from 'node:fs/promises';
 
 import Apps from './apps';
 
-
-
 if (!app.requestSingleInstanceLock()) {
 	// 限制只可以打开一个应用
 	console.log('发现相同实例,已退出.');
@@ -45,8 +43,6 @@ if (!app.requestSingleInstanceLock()) {
 		app.on('browser-window-created', (_, window) => {
 			optimizer.watchWindowShortcuts(window);
 		});
-
-		
 
 		app.on('second-instance', async (event, commandLine) => {
 			// commandLine 是一个数组， 唤醒的链接作为数组的一个元素放在这里面
@@ -102,11 +98,9 @@ if (!app.requestSingleInstanceLock()) {
 	// 	app.quit();
 }
 
-
-
 // 捕获全局异常
-process.on('uncaughtException', (err) => {
+process.on('uncaughtException', err => {
 	console.error(`Caught exception: ${err}`);
-	
+
 	// 已知 node-pty 会在Windows平台抛出`read EPIPE`异常
 });

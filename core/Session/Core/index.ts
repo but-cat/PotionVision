@@ -9,7 +9,7 @@ import Session from '../../Session/index';
 import Prototype from '../../Session/utils/prototype';
 import Context, {  } from "../../Session/utils/context/index";
 
-
+import Page from "./Page/index";
 import Assets from "./Assets/index";
 import Download from "./Download/index";
 import Setting from "./Setting/index";
@@ -46,6 +46,7 @@ export default class Core extends Prototype {
 	}
 
 
+	public readonly Page: Page;
 	public readonly Assets: Assets;
 	public readonly Download: Download;
 	public readonly Setting: Setting;
@@ -62,6 +63,7 @@ export default class Core extends Prototype {
 		const { protocol } = session.session;
 
 
+		this.Page = new Page(session);
 		this.Assets = new Assets(session);
 		this.Download = new Download(session);
 		this.Setting = new Setting(session);
@@ -116,6 +118,8 @@ export default class Core extends Prototype {
 
 			const { authority } = context;
 			switch (authority.name) {
+				case 'page':
+					return this.Page.dispatch(context);
 				case 'assets':
 					return this.Assets.dispatch(context);
 				case 'download':

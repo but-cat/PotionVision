@@ -28,11 +28,16 @@
 					<label for="region" class="block text-sm leading-6 text-gray-900 dark:text-gray-50">历史记录</label>
 
 					<nav class="w-full flex flex-col items-center my-2 space-y-2">
-						<router-link v-for="item in history" :to="{path:'/video',query: item }" v-slot="{ isActive, href, navigate }" class="w-full h-10">
+						<!-- <router-link v-for="item in history" :to="{path:'/video',query: item }" v-slot="{ isActive, href, navigate }" class="w-full h-10">
 							<div :data-laber="isActive" :class="$route.query.url == item.url && ['text-primary-600', 'bg-white dark:bg-slate-700 rounded-lg']" class="w-full h-full px-3 py-2 flex items-center rounded-md hover:bg-white hover:dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
 								<span class="-sr-only truncate">{{ item.title }}</span>
 							</div>
-						</router-link>
+						</router-link> -->
+						<a v-for="item in history" @click="video(item)" class="w-full h-10">
+							<div :data-laber="isActive" :class="$route.query.url == item.url && ['text-primary-600', 'bg-white dark:bg-slate-700 rounded-lg']" class="w-full h-full px-3 py-2 flex items-center rounded-md hover:bg-white hover:dark:bg-slate-700 dark:text-white text-gray-600 focus:outline outline-2 outline-primary-300/80">
+								<span class="-sr-only truncate">{{ item.title }}</span>
+							</div>
+						</a>
 					</nav>
 				</template>
 
@@ -118,13 +123,14 @@ function dark() {
 	win.themeSource = document.body.classList.contains('dark') ? 'dark' : 'light';
 };
 
-function video() {
-	router.push({
-		path: 'video',
-		query: {
-			history: "true"
-		},
-	});
+function video(item) {
+	window.open(`apps://core.page.api/tools/video/index.html?url=${item.url}&time=${item.time}`);
+	// router.push({
+	// 	path: 'video',
+	// 	query: {
+	// 		history: "true"
+	// 	},
+	// });
 };
 
 function historyUpdata() {

@@ -1,10 +1,12 @@
+import Electron, { shell } from 'electron';
 import { Handler, useRouter, useGet, usePost } from '../../../Session/utils/router/index';
 import packageConfig from "@root/package.json";
 // import parse from 'body/json';
 // import typeis from 'type-is';
 
-// import { sortLikeWin } from "./utils";
+import Apps from "../../../apps";
 import upath, { join } from 'upath';
+import pathUtils from "path";
 import mime from 'mime';
 import { Readable } from 'node:stream';
 import { ReadableWebToNodeStream } from 'readable-web-to-node-stream';
@@ -282,15 +284,132 @@ export default class AssetsLocal extends Handler {
 		}
 	}
 
+	// async delete() {
+	// 	try {
+	// 		const { context } = this;
+	// 		const { session, domain, scheme, path: assetsPath } = context;
+	// 		const filePath = join(this.basePath, assetsPath);
+
+	// 		await fs.unlink(filePath);
+	// 	} catch (error: any) {
+	// 		console.log('Assets', 'constructor', error);
+
+	// 		return new Response(error.message, {
+	// 			headers: { 'content-type': 'text/html' },
+	// 			status: 401,
+	// 			statusText: 'Rad Error',
+	// 		});
+	// 	}
+	// }
+
+
+
 	async delete() {
 		try {
 			const { context } = this;
-			const { session, domain, scheme, path: assetsPath } = context;
-			const filePath = join(this.basePath, assetsPath);
+			const { session, domain, scheme, path: assetsPath, url } = context;
+			const filePath = upath.join(this.session.path, assetsPath);
 
-			await fs.unlink(filePath);
+			// await fs.unlink(pathUtils.resolve(filePath));
+			await shell.trashItem(pathUtils.resolve(filePath));
+
+
+			// console.log('Assets', 'delete', url);
+			
+			
+			// const res = await 
+			session.session.fetch(url as unknown as string, {
+				method: 'UPDATE',
+			});
+
+			return new Response('', {
+				headers: { 'content-type': 'text/html' },
+				status: 200,
+				statusText: 'Rad Error',
+			});
 		} catch (error: any) {
-			console.log('Assets', 'constructor', error);
+			console.error('Assets', 'delete', error);
+
+			return new Response(error.message, {
+				headers: { 'content-type': 'text/html' },
+				status: 401,
+				statusText: 'Rad Error',
+			});
+		}
+	}
+
+
+	async rename() {
+		try {
+			const { context } = this;
+			const { session, domain, scheme, path: assetsPath, url, body } = context;
+			const filePath = upath.join(this.session.path, assetsPath);
+
+			const path = filePath.replace(/\/[^\/]+$/, "");
+
+			const name = await body.text();
+			await fs.rename(filePath, upath.join(path, name));
+
+			session.session.fetch(url as unknown as string, {
+				method: 'UPDATE',
+			});
+
+			return new Response('', {
+				headers: { 'content-type': 'text/html' },
+				status: 200,
+				statusText: 'Rad Error',
+			});
+		} catch (error: any) {
+			console.error('Assets', 'rename', error);
+
+			return new Response(`重命名失败：${error.message}`, {
+				headers: { 'content-type': 'text/html' },
+				status: 401,
+				statusText: 'Rad Error',
+			});
+		}
+	}
+
+
+
+
+	async update() {
+		try {
+			const { context } = this;
+			const { session, domain, scheme, path: assetsPath, url } = context;
+			const filePath = upath.join(this.session.path, assetsPath);
+
+			// await fs.unlink(pathUtils.resolve(filePath));
+			// await shell.trashItem(pathUtils.resolve(filePath));
+
+
+			console.log('updateOptions', url, filePath);
+
+			// const fileStat = await fs.stat(filePath);
+
+			const apps = session.Apps as Apps;
+			const { BrowserWindow } = apps;
+
+			const updateOptions = {
+				path: String(filePath),
+				url: String(url),
+				// type: fileStat.isFile() ? 'file' : 'directory',
+			};
+			for (const [windowUuid, window] of BrowserWindow.entries()) {
+				if(window.session.uuid == session.uuid) window.send('file-update', updateOptions);
+			}
+
+			console.log('updateOptions', updateOptions);
+			
+
+
+			return new Response(JSON.stringify(updateOptions), {
+				headers: { 'content-type': 'text/html' },
+				status: 200,
+				statusText: 'Rad Error',
+			});
+		} catch (error: any) {
+			console.error('Assets', 'update', error);
 
 			return new Response(error.message, {
 				headers: { 'content-type': 'text/html' },

@@ -1,19 +1,25 @@
 <template>
 	<oContextMenu :left="left" :top="top" @close="emit('close')">
 		<div @click.stop ref="menuElement" class=" w-80 rounded-lg bg-white text-1 leading-5 text-slate-700 shadow-lg border border-slate-400/20 shadow-black/5 ring-slate-700/10 self-start">
-			<object ref="objectEl" class="object absolute left-0 top-0 w-full h-full" type="text/html" data="about:blank" />
+			<!-- <object ref="objectEl" class="object absolute left-0 top-0 w-full h-full" type="text/html" data="about:blank" /> -->
 			<div tabindex="1" class="flex items-center px-3 py-2 text-slate-400">
 				<!-- <FileIcon :name="path" class="w-5 h-5 flex-0" /> -->
-				<FolderIcon v-if="item.isFolder" :name="item.name" :toolsPage="true" class="w-5 h-5 flex-0"/>
-				<FileIcon v-else-if="item.isFile" :name="item.name" :toolsPage="true" class="w-5 h-5 flex-0"/>
+				<FolderIcon v-if="item.isFolder" :name="item.name" :toolsPage="subPage" class="w-5 h-5 flex-0"/>
+				<FileIcon v-else-if="item.isFile" :name="item.name" :toolsPage="subPage" class="w-5 h-5 flex-0"/>
 				<span class="file-name ml-2 flex-1">{{ item.name }}</span>
 			</div>
 
-			<!-- <ToolsList v-if="item.isFile" @close="emit('close')" :item="item" /> -->
-			
-			<FileMenu v-if="item.isFile" @close="emit('close')" :path="path" :root="root" :item="item"/>
-			<FolderMenu v-else-if="item.isFolder" @close="emit('close')" :path="path" :root="root" :item="item"/>
 
+			<template v-if="item.isFile">
+				<ToolsList v-if="!excludeFile.includes(item.name)" @close="emit('close')" :item="item" />
+			</template>
+			
+			<BookmarkMenu v-if="item.isFolder" @close="emit('close')" :path="path" :root="root" :item="item"/>
+
+			<FileMenu v-if="item.isFile" @close="emit('close')" :path="path" :root="root" :item="item" @rename="emit('rename')" />
+			<FolderMenu v-else-if="item.isFolder" @close="emit('close')"  @create="emit('create')" @rename="emit('rename')" :path="path" :root="root" :item="item"/>
+
+			<!-- @create="emit('create')" -->
 		</div>
 	</oContextMenu>
 </template>
@@ -23,10 +29,11 @@ import { ref, toRefs, computed, onMounted, onBeforeUnmount, nextTick, withDefaul
 import ToolsList from './toolsList.vue';
 import FileMenu from './fileMenu.vue';
 import FolderMenu from './folderMenu.vue';
+import BookmarkMenu from './bookmark.vue';
 
 import { FileItem } from '../utils/filetype';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'create', 'rename']);
 
 const internalInstance = getCurrentInstance(); // 有效  全局
 const globalProperties = internalInstance?.appContext.config.globalProperties!;
@@ -39,7 +46,11 @@ interface Props {
 	item: FileItem;
 	left: number;
 	top: number;
+	subPage: boolean;
 }
+
+
+const excludeFile = ref(['read', 'manifest.json']);
 
 
 const props = withDefaults(defineProps<Props>(),
@@ -50,13 +61,12 @@ const props = withDefaults(defineProps<Props>(),
 		top: 0,
 	},
 );
-const { left, top } = toRefs(props);
+const { left, top, subPage } = toRefs(props);
 
-const objectEl = ref<HTMLObjectElement>();
+// const objectEl = ref<HTMLObjectElement>();
 const menuElement = ref<HTMLElement>();
 const path = computed(() => props.item.path);
 const fileName = computed(() => path.value.replace(/(.*\/)*([^.]+).*/gi, '$2'));
-
 
 onMounted(() => {
 	console.log("mounted", props);

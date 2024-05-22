@@ -63,7 +63,12 @@ export default defineConfig({
 			rollupOptions: {
 				input: {
 					index: resolve(__dirname, './src/index.html'),
-					// main: resolve(__dirname, './src/main.html'),
+					
+					
+
+					startPage: resolve(__dirname, './tools/start/index.html'),
+					videoPage: resolve(__dirname, './tools/video/index.html'),
+					rssPage: resolve(__dirname, './tools/rss/index.html'),
 				},
 			},
 		},

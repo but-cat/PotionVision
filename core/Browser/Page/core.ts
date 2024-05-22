@@ -217,6 +217,10 @@ export default class CorePage {
 
 		if(!webContent) throw new Error('webContent 不存在');
 
+		
+
+
+
 
 		
 		this.webContents.on('page-title-updated', () => {
@@ -229,7 +233,7 @@ export default class CorePage {
 		this.webContents.on('did-stop-loading', () => {
 			this?.stateUpdate();
 		});
-		this.webContents.on('did-finish-load', () => {
+		this.webContents.on('did-finish-load', (event) => {
 			this?.stateUpdate();
 		});
 		this.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame, frameProcessId, frameRoutingId) => {																	// 页面加载失败
@@ -412,5 +416,9 @@ export default class CorePage {
 
 	destroy() {
 		// this.webContents.destroy();
+		this.window?.send('close-page', this.uuid);
+		this.PagePool.delete(this.uuid);
+
+		// this.webContents?.executeJavaScript('(function(w) { w.close() })(window);');
 	}
 }

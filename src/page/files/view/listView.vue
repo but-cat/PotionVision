@@ -83,6 +83,7 @@ import { Authority } from '../authority';
 const emit = defineEmits(['update:path', 'getDirInfo']);
 
 const props = defineProps<{
+	foceItem: FileItem;
 	path: string;
 	fileList: FileItem[];
 }>();

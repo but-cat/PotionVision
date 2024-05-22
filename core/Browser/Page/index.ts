@@ -99,6 +99,17 @@ export default class ComponentsPool extends Map<string, BrowserPage> {
 	}
 
 
+	// delete(uuid: string) {
+	// 	const page = this.get(uuid);
+	// 	if(page) {
+	// 		// page.destroy();
+	// 		return super.delete(uuid);
+	// 	} else {
+	// 		return false;
+	// 	}
+	// }
+
+
 
 	uninstall() {
 		[...this.entries()].forEach(([uuid, page]) => {

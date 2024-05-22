@@ -19,8 +19,8 @@ import yaml from 'js-yaml';
 
 import articleTemplate from './articles.ejs?raw';
 
-import logo from '@root/public/logo.png?asset';
-import logo_ico from '@root/public/logo.ico?asset';
+// import logo from '@root/public/logo.png?asset';
+// import logo_ico from '@root/public/logo.ico?asset';
 
 export default class Bookmark extends EventTarget {
 	// public readonly orbit: Orbit;

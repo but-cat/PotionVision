@@ -62,6 +62,10 @@ export default class Session extends EventEmitter {
 		return join(this.path, `.${packageConfig.name}/bookmark`);
 	}
 
+	get subscribePath() {
+		return join(this.path, `.${packageConfig.name}/subscribe`);
+	}
+
 	constructor(
 		public readonly path: string,
 		public readonly Apps: Apps,
@@ -97,7 +101,7 @@ export default class Session extends EventEmitter {
 			// fs.mkdirSync(this.bookmarkPath, { recursive: true });
 		}
 
-		const dirList = [this.sessionPath, this.sessionToolsPath, this.sessionToolsConfigPath, this.bookmarkPath];
+		const dirList = [this.sessionPath, this.sessionToolsPath, this.sessionToolsConfigPath, this.bookmarkPath, this.subscribePath];
 
 		dirList.forEach(path =>
 			fs.promises.access(path).catch(() => {

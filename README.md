@@ -65,6 +65,8 @@ yarn build:win
 
 [项目地址](https://github.com/yjl9903/naria2)
 
+[文档](https://aria2.document.top/zh/)
+
 [aria构建一个易用的 aria2 客户端包和 CLI 应用2](https://blog.onekuma.cn/build-a-convenient-aria2-cli?locale=en)
 
 [node 进程退出](https://blog.onekuma.cn/death-of-a-node-process)

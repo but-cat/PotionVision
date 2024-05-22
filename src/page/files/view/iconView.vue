@@ -1,5 +1,5 @@
 <template>
-	<div class="flex-1 w-full h-full p-6 pb-40 flex-1 grid grid-cols-6 gap-4 auto-rows-max font-medium text-gray-900 dark:text-gray-200 overflow-auto">
+	<div @contextmenu.prevent.stop="setActiveFile($event, foceItem)" class="flex-1 w-full h-full p-6 pb-40 flex-1 grid grid-cols-6 gap-4 auto-rows-max font-medium text-gray-900 dark:text-gray-200 overflow-auto">
 
 		<div v-for="item in fileList" @contextmenu.prevent.stop="setActiveFile($event, item)" class="item w-full h-full">
 			<div v-if="item.isFolder" @click="activePath = item.path" class="flex flex-col items-center justify-self-center">
@@ -34,6 +34,7 @@ const route = useRoute();
 const emit = defineEmits(['update:path', 'getDirInfo']);
 
 const props = defineProps<{
+	foceItem: FileItem;
 	path: string;
 	fileList: FileItem[]
 }>();
@@ -56,6 +57,8 @@ const activeItem = ref<FileItem | null>(null);
 const position = ref<{ left: number; top: number }>({ left: 0, top: 0 });
 
 const openMenu = computed(() => !!activeItem.value);
+
+
 
 async function getDirInfo() {
 	emit('getDirInfo');
@@ -93,13 +96,15 @@ function openVideo(item: FileItem) {
 
 
 	if(mimeList.includes(item.mime)) {
-		router.push({
-			path: 'video',
-			query: {
-				url: item.url,
-			},
-		});
-		window.dispatchEvent(new CustomEvent('open-video', { detail: { url: item.url } }));
+		// router.push({
+		// 	path: 'video',
+		// 	query: {
+		// 		url: item.url,
+		// 	},
+		// });
+		// window.dispatchEvent(new CustomEvent('open-video', { detail: { url: item.url } }));
+
+		window.open(`apps://core.page.api/tools/video/index.html?url=${item.url}`);
 	}
 }
 

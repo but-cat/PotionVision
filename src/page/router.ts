@@ -17,17 +17,18 @@ import Settings from "./settings/router";
 
 export default [
 	
-	Home,															// 主页
+	// Home,															// 主页
+	Browser,														// 浏览器
 	Video,															// 视频
 	File,															// 文件
-	Browser,
 
-	// Plan,															// 计划
+	
 	Download,														// 下载
-	// Subscribe,														// 订阅
+	Subscribe,														// 订阅
+	// Plan,															// 计划
 	// Archive,														// 归档
 
-	Terminal,														// 终端
+	// Terminal,														// 终端
 
 	// Setting,														// 设置
 	Settings,														// 设置

@@ -1,5 +1,5 @@
 import packageConfig from '@root/package.json';
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 
 import "./message";
@@ -10,6 +10,13 @@ const api = {
 		return navigator.userAgent;
 	}
 };
+
+
+ipcRenderer.on('file-update', (event, data) => {
+	console.log('file-update', data);
+	
+	window.dispatchEvent(new CustomEvent('file-update', { detail: data }));
+});
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

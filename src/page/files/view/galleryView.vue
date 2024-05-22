@@ -137,6 +137,7 @@ const componentMap = ref(
 );
 
 const props = defineProps<{
+	foceItem: FileItem;
 	path: string;
 	fileList: FileItem[];
 }>();

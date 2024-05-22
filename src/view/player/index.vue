@@ -183,7 +183,8 @@ onMounted(async () => {
 });
 
 
-onBeforeUnmount(() => {
+function addHistory() {
+	// alert('addHistory');
 	const history = JSON.parse(localStorage.getItem('nplayer_history') || '[]');
 	const fileName = url.value.replace(/(.*\/)*([^.]+).*/ig, "$2");
 	
@@ -206,7 +207,10 @@ onBeforeUnmount(() => {
 	localStorage.setItem('nplayer_history', JSON.stringify(history));
 	window.dispatchEvent(new Event('storage'));
 	player?.dispose();
-});
+};
+
+onBeforeUnmount(addHistory);
+window.addEventListener('beforeunload', addHistory);
 </script>
 
 <style lang="less" scoped></style>

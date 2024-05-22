@@ -2,7 +2,9 @@
 	<div class="w-full h-full">
 		<Swiper ref="mySwiperBar" :spaceBetween="30" :effect="'fade'" :navigation="true" :modules="modules" :pagination="pagination" @swiper="onSwiper" @slideChange="onSlideChange" class="mySwiperBar w-full h-full">
 			<SwiperSlide v-for="([key, page], index) in browserList" :key="key" style="height: 100%">
+				<!-- <PageView v-if="page.type == 'web'" :page="page" /> -->
 				<PageView v-if="page.type == 'web'" :page="page" />
+				<ToolsView v-else-if="page.type == 'core'" :page="page" />
 			</SwiperSlide>
 		</Swiper>
 	</div>
@@ -20,6 +22,7 @@ import { EffectFade, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css/effect-fade';
 
 import PageView from './page/browser/index.vue';
+import ToolsView from './page/tools/index.vue';
 
 const modules = ref([EffectFade, Navigation, Pagination]);
 

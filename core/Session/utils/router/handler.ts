@@ -86,6 +86,8 @@ export class Handler extends EventEmitter {
 				return this.info();
 			case 'DIRECTORY':
 				return this.directory();
+			case 'UPDATE':
+				return this.update();
 			default:
 				return undefined;
 		}
@@ -122,4 +124,6 @@ export class Handler extends EventEmitter {
 
 
 	directory() {}
+
+	update() {}
 }

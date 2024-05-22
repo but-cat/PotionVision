@@ -1,28 +1,29 @@
 import { app, BrowserWindow, ipcMain, dialog, nativeTheme, nativeImage } from 'electron';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 
-import Orbit from "../apps";
+import Orbit from '../apps';
 // import BrowserPage from "../Page/BrowserPage";
 import packageConfig from '@root/package.json';
 // import logo_ico from '@root/resources/logo.ico?asset';
 
 // import fs from "fs";
-import path, { join } from "upath";
+import path, { join } from 'upath';
 // import upath from "upath";
-import createUUID from "../utils/uuid";
-
-
+import createUUID from '../utils/uuid';
 
 // import CoreComponents from "./CoreComponents";
 // import EdgeBar from "./EdgeBar";
 
-import Session from "../Session/index";
-import Terminal from "./terminal";
+import Session from '../Session/index';
+import Terminal from './terminal';
 
 // import logo from '@root/public/logo.png?asset';
 import logo_ico from '@root/public/favicon.ico?asset';
 
-import PagePool from "./Page/index";
+import PagePool from './Page/index';
+
+import GameServer from "./server";
+import { getPort } from "../utils/getPort";
 
 interface dragOptions {
 	file: string;
@@ -31,15 +32,16 @@ interface dragOptions {
 }
 
 /**
- * 
+ *
  * @param { String } page 页面路径
  * @param { Object } config 窗口配置
  */
 export default class Project extends BrowserWindow {
-
 	public readonly uuid: string = createUUID();
 
 	public readonly PagePool = new PagePool(this);
+
+	server?: GameServer;
 
 	public static get isMac() {
 		return process.platform === 'darwin';
@@ -49,85 +51,79 @@ export default class Project extends BrowserWindow {
 		return is.dev;
 	}
 
-
 	static get appTitle() {
-		return packageConfig.name.slice(0,1).toUpperCase() + packageConfig.name.slice(1).toLowerCase();
+		return packageConfig.name.slice(0, 1).toUpperCase() + packageConfig.name.slice(1).toLowerCase();
 	}
 
 	public readonly orbit: Orbit;
-
 
 	// public readonly view: CoreComponents;
 
 	public readonly projectPath: string;
 
-	
 	public session: Session;
 
 	public terminal?: Terminal;
 
-	public readonly EffectiveAppearance = "dark";																					// 暗色模式
-	public readonly MultiplePage: boolean = false;																					// 是否分屏
-
-
+	public readonly EffectiveAppearance = 'dark'; // 暗色模式
+	public readonly MultiplePage: boolean = false; // 是否分屏
 
 	public get themeSource() {
 		return nativeTheme.themeSource;
 	}
 	public set themeSource(value) {
-		if(['light', 'dark', 'system'].includes(value)) nativeTheme.themeSource = value;
+		if (['light', 'dark', 'system'].includes(value)) nativeTheme.themeSource = value;
 
-		if(!Project.isMac) this.setTitleBarOverlay({
-			// color: !nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
-			symbolColor: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
-			color: '#00000000',
-			height: 32
-		});
+		if (!Project.isMac)
+			this.setTitleBarOverlay({
+				// color: !nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
+				symbolColor: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
+				color: '#00000000',
+				height: 32,
+			});
 	}
-
-
 
 	BrowserPosition = {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
-	}
-
-
+	};
 
 	constructor(orbit: Orbit, config: any = {}) {
 		// console.log('BrowserWindow', 'constructor', config.session);
 
-		const titleBar = Project.isMac ? {
-			titleBarStyle: "hiddenInset"
-		} : {
-			titleBarStyle: 'hidden',
-			titleBarOverlay: {
-				// color: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
-				symbolColor: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
-				color: '#00000000',
-				height: 32
-			},
-		} as any;
-		
+		const titleBar = Project.isMac
+			? {
+					titleBarStyle: 'hiddenInset',
+			  }
+			: ({
+					titleBarStyle: 'hidden',
+					titleBarOverlay: {
+						// color: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
+						symbolColor: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
+						color: '#00000000',
+						height: 32,
+					},
+			  } as any);
+
 		super({
-			x: config.x,																						// 
-			y: config.y,																						// 
-			width: config.width || 800,																			// 
+			x: config.x, //
+			y: config.y, //
+			width: config.width || 800, //
 			height: config.height || 600,
 			minWidth: config.minWidth || 0,
 			minHeight: config.minHeight || 0,
 			maxWidth: config.maxWidth || 0,
 			maxHeight: config.maxHeight || 0,
 
-			show: config?.show ?? true,																			// 开启时是否显示
-			frame: Project.isMac,																				// 窗口边框
+			show: config?.show ?? true, // 开启时是否显示
+			frame: Project.isMac, // 窗口边框
 			// fullscreen: config?.fullscreen ?? false,															// 窗口是否全屏
 			// fullscreenable: config.fullscreen ?? false,															// 窗口是否可以进入全屏状态.
 			// maximizable: config?.fullscreen ?? true,															// 窗口是否可最大化。
-			transparent: config?.transparent ?? false,															// 窗口是否透明
-			thickFrame: config?.thickFrame ?? true,																// 对 Windows 上的无框窗口使用WS_THICKFRAME 样式，会增加标准窗口框架。 设置为 false 时将移除窗口的阴影和动画. 
+			transparent: config?.transparent ?? false, // 窗口是否透明
+			thickFrame: config?.thickFrame ?? true, // 对 Windows 上的无框窗口使用WS_THICKFRAME 样式，会增加标准窗口框架。 设置为 false 时将移除窗口的阴影和动画.
 			// icon: appIcon,
 			// titleBarStyle: "hiddenInset",
 			...titleBar,
@@ -137,9 +133,9 @@ export default class Project extends BrowserWindow {
 			title: config.title || Project.appTitle,
 
 			webPreferences: {
-				plugins: true,																					// 是否应启用插件
-				webSecurity: false,																				// 网络安全 是否启用同源策略 (通常用来测试网站)
-				nodeIntegration: true,																			// 启动 node 模块
+				plugins: true, // 是否应启用插件
+				webSecurity: false, // 网络安全 是否启用同源策略 (通常用来测试网站)
+				nodeIntegration: true, // 启动 node 模块
 				// nodeIntegrationInSubFrames: true,																// 是否在子框架中启用了 Node 集成
 				// partition: "persist:orbit",
 				// nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
@@ -149,22 +145,20 @@ export default class Project extends BrowserWindow {
 
 				/* 功能 */
 				// devTools: !app.isPackaged,																		// 控制台
-				devTools: true,																					// 控制台
-				webviewTag: true,																				// 	启动 webview 内置元素
-
+				devTools: true, // 控制台
+				webviewTag: true, // 	启动 webview 内置元素
 
 				/* 安全性 */
 
 				/**
 				 * 安全性
-				 * 是否在独立 JavaScript 环境中运行 Electron API和指定的preload 脚本. 
+				 * 是否在独立 JavaScript 环境中运行 Electron API和指定的preload 脚本.
 				 * Electron API 仅在 preload 脚本中有效，而不是加载的页面。 在加载可能不受信任的远程内容时, 应使用此选项, 以确保加载的内容不能篡改 preload 脚本和使用的 Electron APIs。
-				 * preload脚本的运行环境仍然可以访问document 和 window全局变量，但它将使用自己内置的函数 (如Array, Object, JSON等)，并且将被加载的页面与对全局环境所做的任何更改隔离开来. 
+				 * preload脚本的运行环境仍然可以访问document 和 window全局变量，但它将使用自己内置的函数 (如Array, Object, JSON等)，并且将被加载的页面与对全局环境所做的任何更改隔离开来.
 				 */
 				contextIsolation: false,
 				// preload: path.join(__static, 'preload/preload.js')
-				preload: join(__dirname, '../preload/index.js'), 
-
+				preload: join(__dirname, '../preload/index.js'),
 
 				/* 沙盒 */
 				session: config.session.session,
@@ -173,29 +167,24 @@ export default class Project extends BrowserWindow {
 			// vibrancy: '#222222aa',
 		});
 
-		require('@electron/remote/main').enable(this.webContents);													// 启用远程模块
+		require('@electron/remote/main').enable(this.webContents); // 启用远程模块
 
 		const { webContents } = this;
 
 		webContents.userAgent = `${app.name}/${app.getVersion()} tools/${this.uuid} view/${this.uuid}`;
-
 
 		const setTitleBarOverlay = () => {
 			this.setTitleBarOverlay({
 				// color: !nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
 				symbolColor: nativeTheme.shouldUseDarkColors ? '#ffffff' : '#000000',
 				color: '#00000000',
-				height: 32
+				height: 32,
 			});
-		}
-		if(!Project.isMac) nativeTheme.on('updated', setTitleBarOverlay);
+		};
+		if (!Project.isMac) nativeTheme.on('updated', setTitleBarOverlay);
 		this.on('close', () => {
 			nativeTheme.removeListener('updated', setTitleBarOverlay);
 		});
-
-		
-		
-
 
 		// 创建主窗口.
 		if (Project.isDev && process.env['ELECTRON_RENDERER_URL']) {
@@ -208,9 +197,7 @@ export default class Project extends BrowserWindow {
 			// webContents.openDevTools();
 		}
 
-		if(!Project.isMac) this.setIcon(logo_ico);
-
-
+		if (!Project.isMac) this.setIcon(logo_ico);
 
 		const createTerminal = this.createTerminal.bind(this);
 		ipcMain.on(`view-terminal-create:${this.uuid}`, createTerminal);
@@ -218,14 +205,11 @@ export default class Project extends BrowserWindow {
 			ipcMain.off(`view-terminal-create:${this.uuid}`, createTerminal);
 		});
 
-
 		this.session = config.session;
-
 
 		this.orbit = orbit;
 		this.projectPath = config.projectPath;
 
-		
 		webContents.setWindowOpenHandler(details => {
 			switch (details.disposition) {
 				// case 'foreground-tab':
@@ -255,15 +239,31 @@ export default class Project extends BrowserWindow {
 
 		webContents.on('destroyed', this.uninstall.bind(this));
 
+		setTimeout(async () => {
+		    // const fetch = this.session.session.fetch;
+		    // const res = await fetch('https://mikanani.me/RSS/Bangumi?bangumiId=3320&subgroupid=615');
+		    // const text = await res.text();
+		    // console.log(text);
+
+			const PublicPath = join(this.session.path, 'games');
+
+			const option = {
+				rootPath: PublicPath,
+				port: await getPort(8800),
+				cors: '*',
+			};
+
+			const server = new GameServer(option);
+			this.server = server;
+		}, 100);
 	}
 
 	/**
 	 * 创建页面
-	 * @param { String } url 链接 
-	 * @returns { String } 页面uuid 
+	 * @param { String } url 链接
+	 * @returns { String } 页面uuid
 	 */
-	public setComponentsState( options) {
-		
+	public setComponentsState(options) {
 		this.PagePool.setPageState({
 			...options,
 			PagePool: this.PagePool,
@@ -272,9 +272,10 @@ export default class Project extends BrowserWindow {
 	}
 	/**
 	 * 关闭页面
-	 * @param { String } uuid 页面uuid 
+	 * @param { String } uuid 页面uuid
 	 */
-	public closeWebViewPage( uuid: string ) {
+	public closeWebViewPage(uuid: string) {
+		// this.PagePool.get(uuid)?.destroy();
 		this.PagePool.delete(uuid);
 	}
 
@@ -285,29 +286,24 @@ export default class Project extends BrowserWindow {
 		});
 	}
 
-
-
 	public fixDragging() {
 		const bounds = this.getBounds();
-		this.setBounds({ height: this.BrowserPosition.height + 1, });
+		this.setBounds({ height: this.BrowserPosition.height + 1 });
 		this.setBounds(bounds);
 	}
 
 	/**
 	 * 向页面中发送消息
-	 * @param channel 
-	 * @param args 
+	 * @param channel
+	 * @param args
 	 */
 	public send(channel: string, ...args: any[]) {
 		try {
 			this.webContents?.send(channel, ...args);
 		} catch (error: any) {
-			console.error('Project.send 窗口发送消息失败',  error.message, args);
+			console.error('Project.send 窗口发送消息失败', error.message, args);
 		}
 	}
-
-	
-
 
 	public dragstart(options: dragOptions) {
 		// console.log("dragstart", logo, options);
@@ -321,28 +317,22 @@ export default class Project extends BrowserWindow {
 		});
 	}
 
-
-
 	private createTerminal() {
 		try {
-			if(this.terminal) {
+			if (this.terminal) {
 				this.terminal.close();
 				this.terminal = undefined;
 			}
 			// if(this.terminal) return;
 			this.terminal = new Terminal(this);
 		} catch (error) {
-			console.error("createTerminal: ", error);
+			console.error('createTerminal: ', error);
 		}
 	}
-	
+
 	uninstall() {
 		this.PagePool.uninstall();
 	}
-
-
-
-
 
 	/**
 	 * 选择文件夹

@@ -45,7 +45,7 @@ export default class CoreView extends PrototypeView {
 		webview.setAttribute('nodeintegrationinsubframes', 'true');
 		webview.setAttribute('disablewebsecurity', 'true');
 		// webview.setAttribute('disablewebsecurity', 'true');
-		webview.setAttribute('preload', `file://${corePreload}`);
+		// webview.setAttribute('preload', `file://${corePreload}`);
 		webview.style.display = 'inline-flex';
 		webview.style.width = '100%';
 		webview.style.height = '100%';
