@@ -220,6 +220,41 @@ export default class CorePage {
 		
 
 
+		// webContent.setWindowOpenHandler(details => {
+		// 	switch (details.disposition) {
+		// 		default:
+		// 			console.log('new-page', details.url);
+		// 			this.send('new-page', details.url);
+		// 			return {
+		// 				action: 'deny', // 'allow' | 'deny' | 'default'
+		// 			};
+		// 			break;
+		// 	}
+		// });
+
+		this.webContents!.setWindowOpenHandler(details => {
+			switch (details.disposition) {
+				// case 'foreground-tab':
+
+				// 	break;
+				// case 'new-window':
+				// 	return {
+				// 		action: 'allow',
+				// 	};
+				// 	break;
+					
+				default:
+					console.log('new-page', details.url);
+
+					this.window.send('new-page', details.url);
+					// this?.stateUpdate();
+
+					return {
+						action: 'deny',
+					};
+					break;
+			}
+		});
 
 
 		

@@ -68,21 +68,8 @@
 <script setup lang="ts">
 import { defineComponent, reactive, ref, computed, watch, getCurrentInstance, onMounted, IframeHTMLAttributes } from 'vue';
 import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
-import ical from 'node-ical';
-import { parseICS, creactICS } from '@core/utils/ics';
+
 import { FileItem } from '@/page/files/utils/filetype';
-
-// function parseICS(params: string) {
-// 	return new Promise((resolve, reject) => {
-// 		ical.async.parseICS(params, (error, data) => error ? reject(error) : resolve(data));
-// 	});
-// }
-
-// function creactICS(event: any) {
-// 	return new Promise((resolve, reject) => {
-// 		createEvent(event, (error, value) => error ? reject(error) : resolve(value));
-// 	});
-// }
 
 const emit = defineEmits(['update:modelValue', 'url']);
 
@@ -111,33 +98,17 @@ async function getEpisodeInfo() {
 		},
 	});
 
-	// const dirInfo = await res.text();
-	const dirInfo = `
-BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-BEGIN:VEVENT
-SUMMARY:Hey look! An example event!
-DTSTART;TZID=America/New_York:20130802T103400
-DTEND;TZID=America/New_York:20130802T110400
-DESCRIPTION: Do something in NY.
-UID:7014-1567468800-1567555199@peterbraden@peterbraden.co.uk
-URL:http://peterbraden.co.uk
-END:VEVENT
-END:VCALENDAR
-`;
+	const dirInfo = await res.json();
 
-	const NodeIcal = await parseICS(dirInfo);
+	console.log('dirInfo', dirInfo);
 
-	console.log('dirInfo', NodeIcal, dirInfo);
-
-	// for (let i = 0; i < dirInfo.children.length; i++) {
-	// 	const current = dirInfo.children[i];
-	// 	if (/\.\_/.test(current.name)) continue;
-	// 	if (current.type !== 'file') continue;
-	// 	if (!mimeList.includes(current.mime)) continue;
-	// 	fileList.value.push(new FileItem(current));
-	// }
+	for (let i = 0; i < dirInfo.children.length; i++) {
+		const current = dirInfo.children[i];
+		if (/\.\_/.test(current.name)) continue;
+		if (current.type !== 'file') continue;
+		if (!mimeList.includes(current.mime)) continue;
+		fileList.value.push(new FileItem(current));
+	}
 }
 
 function getAccessTime(accessTime: number) {
@@ -162,26 +133,6 @@ function openVideo(item: FileItem) {
 
 onMounted(async () => {
 	await getEpisodeInfo();
-
-	let data = await creactICS({
-		start: [2018, 5, 30, 6, 30],
-		duration: { hours: 6, minutes: 30 },
-		title: 'Bolder Boulder',
-		description: 'Annual 10-kilometer run in Boulder, Colorado',
-		location: 'Folsom Field, University of Colorado (finish line)',
-		url: 'http://www.bolderboulder.com/',
-		geo: { lat: 40.0095, lon: 105.2669 },
-		categories: ['10k races', 'Memorial Day Weekend', 'Boulder CO'],
-		status: 'CONFIRMED',
-		busyStatus: 'BUSY',
-		organizer: { name: 'Admin', email: 'Race@BolderBOULDER.com' },
-		// attendees: [
-		// 	{ name: 'Adam Gibbons', email: 'adam@example.com', rsvp: true, partstat: 'ACCEPTED', role: 'REQ-PARTICIPANT' },
-		// 	{ name: 'Brittany Seaton', email: 'brittany@example2.org', dir: 'https://linkedin.com/in/brittanyseaton', role: 'OPT-PARTICIPANT' },
-		// ],
-	});
-
-	console.log('data', data);
 });
 </script>
 

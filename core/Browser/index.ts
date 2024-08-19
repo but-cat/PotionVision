@@ -201,7 +201,7 @@ export default class Project extends BrowserWindow {
 
 		const createTerminal = this.createTerminal.bind(this);
 		ipcMain.on(`view-terminal-create:${this.uuid}`, createTerminal);
-		this.webContents.once('destroyed', () => {
+		webContents.once('destroyed', () => {
 			ipcMain.off(`view-terminal-create:${this.uuid}`, createTerminal);
 		});
 

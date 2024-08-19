@@ -22,6 +22,7 @@ export default class BrowserPage extends CorePage {
 
 	public async initWebView(webContentsId: number): Promise<void> {
 
+		super.initWebView(webContentsId);
 
 		const webContent = WebContents.fromId(webContentsId);
 		const fetch = this.session.session.fetch;
@@ -39,34 +40,10 @@ export default class BrowserPage extends CorePage {
 		console.log('initWebView: ', res.headers.get('Content-Type'));
 
 
-		super.initWebView(webContentsId);
+		// super.initWebView(webContentsId);
 
 		// this.bookmark = new Bookmark(this);
 		this.menu = new contextMenu(this);
-
-		this.webContents.setWindowOpenHandler(details => {
-			switch (details.disposition) {
-				// case 'foreground-tab':
-
-				// 	break;
-				case 'new-window':
-					return {
-						action: 'allow',
-					};
-					break;
-					
-				default:
-					console.log('new-page', details.url);
-
-					this.window.send('new-page', details.url);
-					// this?.stateUpdate();
-
-					return {
-						action: 'deny',
-					};
-					break;
-			}
-		});
 	}
 
 	

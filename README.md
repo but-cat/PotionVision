@@ -98,3 +98,11 @@ yarn build:win
 [使用ffmpeg搭建HLS直播系统](https://zhuanlan.zhihu.com/p/621163439)
 
 [3种ffmpeg-web端视频直播推流方案](https://zhuanlan.zhihu.com/p/678182775)
+
+
+
+### ics 日历数据交换格式
+
+[ics生成](https://www.npmjs.com/package/ics)
+
+[ics解析](https://www.npmjs.com/package/node-ical)

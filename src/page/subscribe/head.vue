@@ -38,9 +38,9 @@
 							<div v-if="menuOpen" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg border border-1 border-gray-200 dark:border-gray-700" role="menu">
 								<!-- Active: "bg-gray-100", Not Active: "" -->
 								<a @click="openAddUrl = true" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">添加新任务</a>
-								<a @click="call(['pauseAll'])" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">暂停所有任务</a>
+								<a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">暂停所有任务</a>
 								<a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">恢复所有任务</a>
-								<a v-if="exception" @click="reloadAria2" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">重启aria2</a>
+								<a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">重启aria2</a>
 							</div>
 						</div>
 					</div>
@@ -49,14 +49,14 @@
 		</div>
 	</nav>
 
-	<AddUrl v-model="openAddUrl" />
+	<!-- <AddUrl v-model="openAddUrl" /> -->
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref, toRefs, computed, onMounted, watch, getCurrentInstance, onBeforeUnmount } from 'vue';
 // import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 // import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
-import AddUrl from './addUrl.vue';
+// import AddUrl from './addUrl.vue';
 
 const emit = defineEmits(['update:modelValue', 'update:exception']);
 const props = defineProps({
@@ -67,6 +67,10 @@ const props = defineProps({
 	exception: {
 		type: Boolean,
 		default: false,
+	},
+	typeList: {
+		type: Object,
+		default: () => ({}),
 	},
 });
 
@@ -95,42 +99,12 @@ const tellType = computed({
 	},
 });
 
-const typeList = ref<{
-	[key: string]: string;
-}>({
-	tellActive: '运行中',
-	tellWaiting: '等待中',
-	tellStopped: '已停止',
-});
-
-async function call(parameter: any[]) {
-	try {
-		await fetch('apps://download.api/progress/call', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(parameter),
-		});
-		exception.value = false;
-	} catch (error) {
-		exception.value = true;
-	}
-}
-
-
-async function reloadAria2() {
-	try {
-		await fetch('apps://download.api/progress/reloadAria2', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			// body: JSON.stringify(parameter),
-		});
-	} catch (error) {}
-}
+// const typeList = ref<{
+// 	[key: string]: string;
+// }>({
+// 	tellActive: '订阅列表',
+// 	tellWaiting: '日历',
+// 	// tellStopped: '已停止',
+// });
 
 </script>

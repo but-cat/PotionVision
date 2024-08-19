@@ -11,7 +11,7 @@
 
 		<div ref="videoList" class="w-full flex-1 flex flex-wrap p-4 pb-28 overflow-auto">
 			<!-- Column -->
-			<div v-for="(item, index) in fileList" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+			<div v-for="(item, index) in fileList" class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3 text-gray-700 dark:text-gray-300">
 				<article :class="url == item.url && ['outline outline-2 outline-primary-300/80']" class="max-w-80 h-60 m-auto flex flex-col overflow-hidden rounded-lg shadow-lg bg-gray-100 dark:bg-gray-700">
 					<div @click="url = item.url" class="block w-full h-36 relative" style="background-color: black">
 						<video :src="item.url" class="w-full h-full" alt="Placeholder" width="600" height="400" style="object-fit: cover;"/>
@@ -43,7 +43,7 @@
 					</div>
 
 					<header class="flex-1 flex flex-col items-center justify-between leading-tight p-2 md:p-4">
-						<h1 @click="url = item.url" class="video-name w-full text-md no-underline hover:underline text-black">
+						<h1 @click="url = item.url" class="video-name text-gray-800 dark:text-gray-200 w-full text-md no-underline hover:underline text-black">
 							{{ item.name }}
 						</h1>
 
