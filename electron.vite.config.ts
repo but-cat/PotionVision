@@ -1,7 +1,13 @@
 import { resolve } from 'path';
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 import vue from '@vitejs/plugin-vue';
+import PackageJson from './package.json';
 
+const global_ENV = {
+	__APP_VERSION__: JSON.stringify(PackageJson.version),
+	__APP_NAME__: JSON.stringify(PackageJson.name),
+	__CLIENT_TYPE__: JSON.stringify(process.platform),
+};
 
 export default defineConfig({
 	main: {
@@ -72,6 +78,7 @@ export default defineConfig({
 				},
 			},
 		},
+		define: global_ENV,
 		plugins: [
 			
 			

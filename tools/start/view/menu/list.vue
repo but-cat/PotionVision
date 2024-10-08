@@ -33,7 +33,7 @@
 						</svg>
 					</div>
 
-					<header class="flex-1 flex flex-col items-center justify-between leading-tight p-2 md:p-4">
+					<header class="flex-1 flex flex-col items-center justify-between leading-tight p-2 md:p-4 text-gray-700 dark:text-gray-200">
 						<h1 @click="openVideo(item)" class="video-name w-full text-md no-underline hover:underline text-black">
 							{{ item.name }}
 						</h1>

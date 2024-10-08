@@ -116,7 +116,7 @@ watch(() => colorHSV, () => {
 }, { deep: true });
 
 watch(() => modelValue.value, () => {
-	if (modelValue.value === '' || modelValue.value == colorHEX.value) return;
+	if (!modelValue.value || modelValue.value == colorHEX.value) return;
 	const color = convert.hex.hsv(modelValue.value);
 	colorHSV.h = color[0];
 	colorHSV.s = color[1];

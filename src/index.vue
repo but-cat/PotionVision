@@ -19,15 +19,14 @@
 					</router-view>
 				</div>
 
-				<div v-show="isBrowserPage" :ishref="$route.path == '/'" :href="$route.path" class="w-full h-full flex flex-col text-gray-300 dark:text-gray-800 overflow-hidden absolute left-0 top-0 z-50">
+				<!-- <div v-show="isBrowserPage" :ishref="$route.path == '/'" :href="$route.path" class="w-full h-full flex flex-col text-gray-300 dark:text-gray-800 overflow-hidden absolute left-0 top-0 z-50">
 					<div class="flex-0 h-10 flex flex-col bg-gray-200 dark:bg-gray-900 dark:text-white text-gray-600">
 						<AppMenu/>
-						<!-- <div class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700" style="flex: 0 0 6px;border-bottom-width: 1px;"></div> -->
 					</div>
 					<div class="flex-1 w-full overflow-hidden">
 						<WebView></WebView>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			
 			

@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, session, dialog } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import log from 'electron-log/main';
 require('@electron/remote/main').initialize(); // in the main process:
 // import icon from '../resources/logo.png?asset';
 
@@ -10,12 +11,17 @@ import fs from 'node:fs/promises';
 
 import Apps from './apps';
 
+console.log = log.log;
+console.error = log.error;
+
 if (!app.requestSingleInstanceLock()) {
 	// 限制只可以打开一个应用
 	console.log('发现相同实例,已退出.');
 	app.quit();
 } else {
 	app.commandLine.appendSwitch('disable-features', 'WidgetLayering'); // 禁用 WidgetLayering 特性
+
+	log.initialize();
 
 	const appInstance = new Apps();
 	(app as any).AppInstance = appInstance;

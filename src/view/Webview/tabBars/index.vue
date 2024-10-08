@@ -1,8 +1,9 @@
 <template>
-	<div class="tab-bars w-full h-full  w-16 flex flex-shrink-0 flex-col z-50 backdrop-blur-sm">
+	<div class="tab-bars w-full h-full  w-16 flex flex-col flex-shrink-0 flex-col z-50 backdrop-blur-sm">
 		
 
 		<TabList v-bind="$attrs"/>
+		
 	</div>
 </template>
 
